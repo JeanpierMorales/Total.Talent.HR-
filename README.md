@@ -1,7 +1,5 @@
 # Sistema Integrado de Gestión de Talento y Contratación
 
----
-
 ## 🧩 Descripción del caso de estudio
 
 El proyecto se desarrolla en un escenario basado en los desafíos reales de la consultora **Total Talent HR**, empresa peruana especializada en gestión de recursos humanos.
@@ -11,8 +9,6 @@ El objetivo principal fue **diseñar e implementar un sistema integrado** que un
 La solución busca resolver los principales problemas identificados:
 
 - **Complejidad contractual manual** por la diversidad de modalidades laborales.
-  
----
 
 ## ⚙️ Tecnologías y herramientas
 
@@ -22,8 +18,6 @@ La solución busca resolver los principales problemas identificados:
 - **Base de datos:** MySQL (XAMPP)
 - **Framework de pruebas:** JUnit
 - **Sistema operativo:** Windows 10
-
----
 
 ## 🧱 Arquitectura del sistema
 
@@ -35,8 +29,6 @@ El sistema aplica **principios SOLID** y **patrones de diseño** para asegurar m
 - **Facade:** Simplificación de operaciones complejas del modelo.
 - **MVC (Model-View-Controller):** Separación clara entre lógica, presentación y control.
 - **Repository:** Persistencia estructurada y auditable en la base de datos.
-
----
 
 ## 🎯 Objetivos
 
@@ -51,14 +43,11 @@ Desarrollar un sistema de gestión de talento integrado para **Total Talent HR**
 - Diseñar una interfaz visual moderna bajo el patrón **MVC**.
 - Incorporar un **dashboard centralizado** para el seguimiento de empleados y contratos en tiempo real.
 
----
-
 ## 🧪 Pruebas
 
 El sistema cuenta con:
 
 - **10 pruebas unitarias** para verificar el comportamiento interno de las clases.
----
 
 ## 👥 Equipo de desarrollo
 
