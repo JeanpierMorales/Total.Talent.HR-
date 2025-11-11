@@ -267,6 +267,8 @@ public class ContratoMysqlRepository implements ContratoRepository {
 
         contrato.setIdContrato(rs.getInt("id_contrato"));
         contrato.getEmpleado().setIdEmpleado(rs.getInt("id_empleado"));
+        contrato.getEmpleado().setNombre(rs.getString("nombre"));
+        contrato.getEmpleado().setApellidos(rs.getString("apellidos"));
         contrato.setFechaInicio(rs.getDate("fecha_inicio"));
         contrato.setFechaFin(rs.getDate("fecha_fin"));
         contrato.setSalarioBase(rs.getBigDecimal("salario_base").doubleValue());

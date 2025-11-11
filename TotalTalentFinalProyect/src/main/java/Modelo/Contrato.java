@@ -19,6 +19,7 @@ public abstract class Contrato {
 
     public Contrato() {
         // Constructor por defecto para instanciarlo en el factory
+        this.empleado = new Empleado();
     }
 
     // Métodos de acceso Getters y Setters

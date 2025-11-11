@@ -133,9 +133,9 @@ public class Empleado {
                 + "Número: " + this.numero + "\n"
                 + "Correo: " + this.correo + "\n"
                 + "Dirección: " + this.direccion + "\n"
-                + "Grado de Instrucción: " + this.gradoInstruccion + "\n"
-                + "Carrera: " + this.carrera + "\n"
-                + "Comentarios: " + this.comentarios + "\n"
+                + "Grado de Instrucción: " + this.getGradoInstruccion() + "\n"
+                + "Carrera: " + this.getCarrera() + "\n"
+                + "Comentarios: " + this.getComentarios() + "\n"
                 + "Rol: " + this.rol;
     }
     
