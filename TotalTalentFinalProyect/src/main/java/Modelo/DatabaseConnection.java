@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     // Constantes para la configuración de la base de datos
-    private static final String URL = "jdbc:mysql://localhost:3305/total_talent_db";
+    private static final String URL = "jdbc:mysql://localhost:3306/total_talent_db";
     private static final String USER = "root"; // Usuario por defecto en XAMPP
     private static final String PASSWORD = ""; // Contraseña vacía por defecto en XAMPP
 
