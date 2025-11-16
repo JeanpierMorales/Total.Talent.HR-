@@ -1,6 +1,5 @@
 package Modelo;
 
-
 public class Empleado {
 
     // Atributos de la clase Empleado 
@@ -16,7 +15,9 @@ public class Empleado {
     private String carrera;
     private String comentarios;
     // Rol del empleado dentro del sistema
-    private Rol rol; 
+    private Rol rol;
+    // Atributo para el contrato del empleado
+    private Contrato contrato;
 
     // Getters y Setters
     public int getIdEmpleado() {
@@ -106,7 +107,7 @@ public class Empleado {
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
     }
-    
+
     // Métodos de acceso para el rol 
     public Rol getRol() {
         return rol;
@@ -138,10 +139,17 @@ public class Empleado {
                 + "Comentarios: " + this.getComentarios() + "\n"
                 + "Rol: " + this.rol;
     }
-    
+
     public void validarDatos() {
         // Lógica de validación del empleado
     }
 
-}
+    // Getter y Setter para el contrato
+    public Contrato getContrato() {
+        return contrato;
+    }
 
+    public void setContrato(Contrato contrato) {
+        this.contrato = contrato;
+    }
+}

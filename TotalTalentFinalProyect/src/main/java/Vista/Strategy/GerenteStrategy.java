@@ -1,15 +1,40 @@
 package Vista.Strategy;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 import Controlador.TotalTalentControlador;
-import Modelo.Empleado;
 import Modelo.Contrato;
+import Modelo.Empleado;
 import Modelo.Rol;
 import Modelo.Usuario;
 import Vista.DashboardVista;
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
 
 // Estrategia específica para el rol de Gerente
 // Implementa funcionalidades de visualización de reportes y estadísticas
@@ -66,11 +91,8 @@ public class GerenteStrategy implements DashboardStrategy {
         panelIzquierdo.setPreferredSize(new Dimension(200, vista.getHeight()));
 
         JButton btnVerReportes = crearBotonNavbar("Ver Reportes", vista);
-        JButton btnVerEstadisticas = crearBotonNavbar("Ver Estadísticas", vista);
 
         panelIzquierdo.add(btnVerReportes);
-        panelIzquierdo.add(Box.createVerticalStrut(10));
-        panelIzquierdo.add(btnVerEstadisticas);
 
         return panelIzquierdo;
     }
@@ -105,9 +127,6 @@ public class GerenteStrategy implements DashboardStrategy {
             case "Ver Reportes":
                 mostrarPanelReportes(panelContenido, vista, controlador);
                 break;
-            case "Ver Estadísticas":
-                mostrarPanelEstadisticas(panelContenido, vista, controlador);
-                break;
             default:
                 vista.mostrarPanelPrincipalPublico();
         }
@@ -122,48 +141,61 @@ public class GerenteStrategy implements DashboardStrategy {
         panelReportes.setLayout(new BoxLayout(panelReportes, BoxLayout.Y_AXIS));
         panelReportes.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        JLabel lblTitulo = new JLabel("REPORTES DEL SISTEMA", SwingConstants.CENTER);
+        JLabel lblTitulo = new JLabel("REPORTES Y ESTADÍSTICAS DEL SISTEMA", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
         lblTitulo.setForeground(getColorTexto());
         lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        panelBotones.setBackground(getColorFondo());
+        // Panel de filtros y búsqueda
+        JPanel panelFiltros = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelFiltros.setBackground(getColorFondo());
 
-        JButton btnReporteEmpleados = new JButton("Generar Reporte Empleados");
-        JButton btnReporteContratos = new JButton("Generar Reporte Contratos");
+        JComboBox<String> cbTipoReporte = new JComboBox<>(new String[]{"Empleados", "Contratos", "Todos"});
+        JTextField txtBuscar = new JTextField(20);
+        JButton btnBuscar = new JButton("Buscar");
+        JButton btnLimpiar = new JButton("Limpiar");
 
-        estilizarBoton(btnReporteEmpleados);
-        estilizarBoton(btnReporteContratos);
+        estilizarBoton(btnBuscar);
+        estilizarBoton(btnLimpiar);
 
-        JTextArea txtReporte = new JTextArea(25, 60);
-        txtReporte.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(txtReporte);
+        panelFiltros.add(new JLabel("Tipo de Reporte:"));
+        panelFiltros.add(cbTipoReporte);
+        panelFiltros.add(new JLabel("Buscar:"));
+        panelFiltros.add(txtBuscar);
+        panelFiltros.add(btnBuscar);
+        panelFiltros.add(btnLimpiar);
 
-        btnReporteEmpleados.addActionListener(e -> {
-            try {
-                String reporte = controlador.generarReporteEmpleados();
-                txtReporte.setText(reporte);
-            } catch (Exception ex) {
-                txtReporte.setText("Error al generar reporte: " + ex.getMessage());
-            }
+        // Panel para reportes y gráficos
+        JPanel panelContenidoReportes = new JPanel();
+        panelContenidoReportes.setBackground(getColorFondo());
+        panelContenidoReportes.setLayout(new BoxLayout(panelContenidoReportes, BoxLayout.Y_AXIS));
+
+        JScrollPane scrollPane = new JScrollPane(panelContenidoReportes);
+
+        // Cargar reporte inicial con gráficos
+        cargarReporteGrafico(controlador, panelContenidoReportes, (String) cbTipoReporte.getSelectedItem(), "");
+
+        btnBuscar.addActionListener(e -> {
+            String tipo = (String) cbTipoReporte.getSelectedItem();
+            String filtro = txtBuscar.getText().trim();
+            panelContenidoReportes.removeAll();
+            cargarReporteGrafico(controlador, panelContenidoReportes, tipo, filtro);
+            panelContenidoReportes.revalidate();
+            panelContenidoReportes.repaint();
         });
 
-        btnReporteContratos.addActionListener(e -> {
-            try {
-                String reporte = controlador.generarReporteContratos();
-                txtReporte.setText(reporte);
-            } catch (Exception ex) {
-                txtReporte.setText("Error al generar reporte: " + ex.getMessage());
-            }
+        btnLimpiar.addActionListener(e -> {
+            txtBuscar.setText("");
+            cbTipoReporte.setSelectedIndex(0);
+            panelContenidoReportes.removeAll();
+            cargarReporteGrafico(controlador, panelContenidoReportes, "Todos", "");
+            panelContenidoReportes.revalidate();
+            panelContenidoReportes.repaint();
         });
-
-        panelBotones.add(btnReporteEmpleados);
-        panelBotones.add(btnReporteContratos);
 
         panelReportes.add(lblTitulo);
         panelReportes.add(Box.createVerticalStrut(20));
-        panelReportes.add(panelBotones);
+        panelReportes.add(panelFiltros);
         panelReportes.add(Box.createVerticalStrut(20));
         panelReportes.add(scrollPane);
 
@@ -172,61 +204,182 @@ public class GerenteStrategy implements DashboardStrategy {
         panelContenido.repaint();
     }
 
-    private void mostrarPanelEstadisticas(JPanel panelContenido, DashboardVista vista, TotalTalentControlador controlador) {
-        panelContenido.removeAll();
-        panelContenido.setLayout(new BorderLayout());
-
-        JPanel panelEstadisticas = new JPanel();
-        panelEstadisticas.setBackground(getColorFondo());
-        panelEstadisticas.setLayout(new BoxLayout(panelEstadisticas, BoxLayout.Y_AXIS));
-        panelEstadisticas.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-
-        JLabel lblTitulo = new JLabel("ESTADÍSTICAS DEL SISTEMA", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
-        lblTitulo.setForeground(getColorTexto());
-        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JTextArea txtEstadisticas = new JTextArea(20, 50);
-        txtEstadisticas.setEditable(false);
-
-        // Calcular estadísticas
+    private void cargarReporteGrafico(TotalTalentControlador controlador, JPanel panelContenido, String tipo, String filtro) {
         try {
-            List<Empleado> empleados = controlador.obtenerTodosEmpleados();
-            List<Contrato> contratos = controlador.obtenerTodosContratos();
-            List<Usuario> usuarios = controlador.obtenerTodosUsuarios();
+            List<Empleado> empleados = new ArrayList<>();
+            List<Contrato> contratos = new ArrayList<>();
+            try {
+                empleados = controlador.obtenerTodosEmpleados();
+            } catch (Exception e) {
+                // Si no tiene permisos, mostrar mensaje de error
+                JLabel lblError = new JLabel("No tiene permisos para ver empleados: " + e.getMessage());
+                lblError.setForeground(Color.RED);
+                panelContenido.add(lblError);
+                return;
+            }
+            try {
+                contratos = controlador.obtenerTodosContratos();
+            } catch (Exception e) {
+                // Si no tiene permisos, mostrar mensaje de error
+                JLabel lblError = new JLabel("No tiene permisos para ver contratos: " + e.getMessage());
+                lblError.setForeground(Color.RED);
+                panelContenido.add(lblError);
+                return;
+            }
 
-            StringBuilder stats = new StringBuilder();
-            stats.append("=== ESTADÍSTICAS DEL SISTEMA ===\n\n");
-            stats.append("Total de empleados: ").append(empleados.size()).append("\n");
-            stats.append("Total de contratos: ").append(contratos.size()).append("\n");
-            stats.append("Total de usuarios: ").append(usuarios.size()).append("\n\n");
+            // Aplicar filtro si existe
+            List<Empleado> empleadosFiltrados = empleados;
+            List<Contrato> contratosFiltrados = contratos;
 
-            // Estadísticas por rol
-            long administradores = usuarios.stream().filter(u -> u.getRol() == Rol.ADMINISTRADOR).count();
-            long reclutadores = usuarios.stream().filter(u -> u.getRol() == Rol.RECLUTADOR).count();
-            long gerentes = usuarios.stream().filter(u -> u.getRol() == Rol.GERENTE).count();
-            long empleadosRol = usuarios.stream().filter(u -> u.getRol() == Rol.EMPLEADO).count();
+            if (!filtro.isEmpty()) {
+                empleadosFiltrados = empleados.stream()
+                        .filter(e -> e.getNombre().toLowerCase().contains(filtro.toLowerCase())
+                        || e.getApellidos().toLowerCase().contains(filtro.toLowerCase())
+                        || e.getDni().contains(filtro))
+                        .collect(Collectors.toList());
 
-            stats.append("Distribución por roles:\n");
-            stats.append("  Administradores: ").append(administradores).append("\n");
-            stats.append("  Reclutadores: ").append(reclutadores).append("\n");
-            stats.append("  Gerentes: ").append(gerentes).append("\n");
-            stats.append("  Empleados: ").append(empleadosRol).append("\n");
+                contratosFiltrados = contratos.stream()
+                        .filter(c -> c.getTipoContrato().toLowerCase().contains(filtro.toLowerCase())
+                        || (c.getEmpleado() != null
+                        && (c.getEmpleado().getNombre().toLowerCase().contains(filtro.toLowerCase())
+                        || c.getEmpleado().getApellidos().toLowerCase().contains(filtro.toLowerCase()))))
+                        .collect(Collectors.toList());
+            }
 
-            txtEstadisticas.setText(stats.toString());
-        } catch (Exception e) {
-            txtEstadisticas.setText("Error al calcular estadísticas: " + e.getMessage());
+            if ("Empleados".equals(tipo) || "Todos".equals(tipo)) {
+                // Gráfico de pastel: Distribución de empleados por rol
+                DefaultPieDataset datasetEmpleados = new DefaultPieDataset();
+                long adminCount = empleadosFiltrados.stream().filter(e -> e.getRol() == Rol.ADMINISTRADOR).count();
+                long reclutadorCount = empleadosFiltrados.stream().filter(e -> e.getRol() == Rol.RECLUTADOR).count();
+                long gerenteCount = empleadosFiltrados.stream().filter(e -> e.getRol() == Rol.GERENTE).count();
+                long empleadoCount = empleadosFiltrados.stream().filter(e -> e.getRol() == Rol.EMPLEADO).count();
+
+                datasetEmpleados.setValue("Administradores", adminCount);
+                datasetEmpleados.setValue("Reclutadores", reclutadorCount);
+                datasetEmpleados.setValue("Gerentes", gerenteCount);
+                datasetEmpleados.setValue("Empleados", empleadoCount);
+
+                JFreeChart chartEmpleados = ChartFactory.createPieChart(
+                        "Distribución de Empleados por Rol",
+                        datasetEmpleados,
+                        true, true, false
+                );
+
+                ChartPanel chartPanelEmpleados = new ChartPanel(chartEmpleados);
+                chartPanelEmpleados.setPreferredSize(new Dimension(500, 350));
+
+                // Estadísticas textuales
+                JPanel panelStatsEmpleados = new JPanel();
+                panelStatsEmpleados.setBackground(getColorFondo());
+                panelStatsEmpleados.setLayout(new BoxLayout(panelStatsEmpleados, BoxLayout.Y_AXIS));
+
+                double edadPromedio = empleadosFiltrados.stream().mapToInt(Empleado::getEdad).average().orElse(0.0);
+
+                JLabel lblTotalEmpleados = new JLabel("Total empleados: " + empleadosFiltrados.size());
+                lblTotalEmpleados.setFont(new Font("Arial", Font.BOLD, 14));
+                lblTotalEmpleados.setForeground(getColorTexto());
+
+                JLabel lblEdadPromedio = new JLabel("Edad promedio: " + String.format("%.1f", edadPromedio) + " años");
+                lblEdadPromedio.setFont(new Font("Arial", Font.PLAIN, 12));
+                lblEdadPromedio.setForeground(getColorTexto());
+
+                panelStatsEmpleados.add(lblTotalEmpleados);
+                panelStatsEmpleados.add(Box.createVerticalStrut(5));
+                panelStatsEmpleados.add(lblEdadPromedio);
+
+                // Lista de empleados
+                JTextArea txtEmpleados = new JTextArea(10, 50);
+                txtEmpleados.setEditable(false);
+                StringBuilder empleadosText = new StringBuilder("LISTA DE EMPLEADOS:\n");
+                empleadosText.append("==================\n");
+                for (Empleado emp : empleadosFiltrados) {
+                    empleadosText.append(String.format("ID: %d - %s %s - %s - %s\n",
+                            emp.getIdEmpleado(), emp.getNombre(), emp.getApellidos(),
+                            emp.getDni(), emp.getRol()));
+                }
+                txtEmpleados.setText(empleadosText.toString());
+                JScrollPane scrollEmpleados = new JScrollPane(txtEmpleados);
+
+                panelContenido.add(new JLabel("EMPLEADOS", SwingConstants.CENTER));
+                panelContenido.add(Box.createVerticalStrut(10));
+                panelContenido.add(chartPanelEmpleados);
+                panelContenido.add(Box.createVerticalStrut(10));
+                panelContenido.add(panelStatsEmpleados);
+                panelContenido.add(Box.createVerticalStrut(10));
+                panelContenido.add(scrollEmpleados);
+                panelContenido.add(Box.createVerticalStrut(30));
+            }
+
+            if ("Contratos".equals(tipo) || "Todos".equals(tipo)) {
+                // Gráfico de barras: Distribución de contratos por tipo
+                DefaultCategoryDataset datasetContratos = new DefaultCategoryDataset();
+                long parcialCount = contratosFiltrados.stream().filter(c -> "Parcial".equals(c.getTipoContrato())).count();
+                long planillaCount = contratosFiltrados.stream().filter(c -> "Planilla".equals(c.getTipoContrato())).count();
+                long locacionCount = contratosFiltrados.stream().filter(c -> "Locación".equals(c.getTipoContrato())).count();
+
+                datasetContratos.addValue(parcialCount, "Contratos", "Parcial");
+                datasetContratos.addValue(planillaCount, "Contratos", "Planilla");
+                datasetContratos.addValue(locacionCount, "Contratos", "Locación");
+
+                JFreeChart chartContratos = ChartFactory.createBarChart(
+                        "Distribución de Contratos por Tipo",
+                        "Tipo de Contrato",
+                        "Cantidad",
+                        datasetContratos,
+                        PlotOrientation.VERTICAL,
+                        false, true, false
+                );
+
+                ChartPanel chartPanelContratos = new ChartPanel(chartContratos);
+                chartPanelContratos.setPreferredSize(new Dimension(500, 350));
+
+                // Estadísticas textuales
+                JPanel panelStatsContratos = new JPanel();
+                panelStatsContratos.setBackground(getColorFondo());
+                panelStatsContratos.setLayout(new BoxLayout(panelStatsContratos, BoxLayout.Y_AXIS));
+
+                double salarioPromedio = contratosFiltrados.stream().mapToDouble(Contrato::getSalarioBase).average().orElse(0.0);
+
+                JLabel lblTotalContratos = new JLabel("Total contratos: " + contratosFiltrados.size());
+                lblTotalContratos.setFont(new Font("Arial", Font.BOLD, 14));
+                lblTotalContratos.setForeground(getColorTexto());
+
+                JLabel lblSalarioPromedio = new JLabel("Salario promedio: S/ " + String.format("%.2f", salarioPromedio));
+                lblSalarioPromedio.setFont(new Font("Arial", Font.PLAIN, 12));
+                lblSalarioPromedio.setForeground(getColorTexto());
+
+                panelStatsContratos.add(lblTotalContratos);
+                panelStatsContratos.add(Box.createVerticalStrut(5));
+                panelStatsContratos.add(lblSalarioPromedio);
+
+                // Lista de contratos
+                JTextArea txtContratos = new JTextArea(10, 50);
+                txtContratos.setEditable(false);
+                StringBuilder contratosText = new StringBuilder("LISTA DE CONTRATOS:\n");
+                contratosText.append("==================\n");
+                for (Contrato cont : contratosFiltrados) {
+                    contratosText.append(String.format("ID: %d - %s - %s - S/ %.2f\n",
+                            cont.getIdContrato(), cont.getTipoContrato(),
+                            cont.getEmpleado() != null ? cont.getEmpleado().getNombre() + " " + cont.getEmpleado().getApellidos() : "Sin asignar",
+                            cont.getSalarioBase()));
+                }
+                txtContratos.setText(contratosText.toString());
+                JScrollPane scrollContratos = new JScrollPane(txtContratos);
+
+                panelContenido.add(new JLabel("CONTRATOS", SwingConstants.CENTER));
+                panelContenido.add(Box.createVerticalStrut(10));
+                panelContenido.add(chartPanelContratos);
+                panelContenido.add(Box.createVerticalStrut(10));
+                panelContenido.add(panelStatsContratos);
+                panelContenido.add(Box.createVerticalStrut(10));
+                panelContenido.add(scrollContratos);
+            }
+
+        } catch (Exception ex) {
+            JLabel lblError = new JLabel("Error al cargar reportes gráficos: " + ex.getMessage());
+            lblError.setForeground(Color.RED);
+            panelContenido.add(lblError);
         }
-
-        JScrollPane scrollPane = new JScrollPane(txtEstadisticas);
-
-        panelEstadisticas.add(lblTitulo);
-        panelEstadisticas.add(Box.createVerticalStrut(20));
-        panelEstadisticas.add(scrollPane);
-
-        panelContenido.add(panelEstadisticas, BorderLayout.CENTER);
-        panelContenido.revalidate();
-        panelContenido.repaint();
     }
 
     private void estilizarBoton(JButton boton) {

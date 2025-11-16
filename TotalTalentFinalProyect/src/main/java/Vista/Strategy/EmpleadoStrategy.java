@@ -1,18 +1,36 @@
 package Vista.Strategy;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JCheckBox;
+import javax.swing.SwingConstants;
 
 import Controlador.TotalTalentControlador;
-import Modelo.Empleado;
 import Modelo.Contrato;
+import Modelo.Empleado;
 import Modelo.Usuario;
 import Utilidades.Validaciones;
 import Vista.DashboardVista;
-import javax.swing.*;
-import java.awt.*;
-import java.util.List;
 
 // Estrategia específica para el rol de Empleado
-// Implementa funcionalidades de visualización y edición de datos personales
+// Implementa funcionalidades de visualización e edición de datos personales
 public class EmpleadoStrategy implements DashboardStrategy {
 
     // Colores específicos del empleado (grises)
@@ -67,13 +85,13 @@ public class EmpleadoStrategy implements DashboardStrategy {
 
         JButton btnVerDatosPersonales = crearBotonNavbar("Ver Datos Personales", vista);
         JButton btnEditarDatosPersonales = crearBotonNavbar("Editar Datos Personales", vista);
-        JButton btnVerContratos = crearBotonNavbar("Ver Mis Contratos", vista);
+        // JButton btnVerContratos = crearBotonNavbar("Ver Mis Contratos", vista);
 
         panelIzquierdo.add(btnVerDatosPersonales);
         panelIzquierdo.add(Box.createVerticalStrut(10));
         panelIzquierdo.add(btnEditarDatosPersonales);
         panelIzquierdo.add(Box.createVerticalStrut(10));
-        panelIzquierdo.add(btnVerContratos);
+        // panelIzquierdo.add(btnVerContratos);
 
         return panelIzquierdo;
     }
@@ -87,10 +105,12 @@ public class EmpleadoStrategy implements DashboardStrategy {
         boton.setMaximumSize(new Dimension(180, 40));
         boton.setAlignmentX(Component.CENTER_ALIGNMENT);
         boton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 boton.setBackground(getColorBotonHover());
             }
 
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 boton.setBackground(getColorBoton());
             }
@@ -111,9 +131,9 @@ public class EmpleadoStrategy implements DashboardStrategy {
             case "Editar Datos Personales":
                 mostrarPanelEditarDatosPersonales(panelContenido, vista, controlador);
                 break;
-            case "Ver Mis Contratos":
-                mostrarPanelMisContratos(panelContenido, vista, controlador);
-                break;
+            // case "Ver Mis Contratos":
+            // mostrarPanelMisContratos(panelContenido, vista, controlador);
+            // break;
             default:
                 vista.mostrarPanelPrincipalPublico();
         }
@@ -123,56 +143,155 @@ public class EmpleadoStrategy implements DashboardStrategy {
         panelContenido.removeAll();
         panelContenido.setLayout(new BorderLayout());
 
-        JPanel panelDatos = new JPanel();
-        panelDatos.setBackground(getColorFondo());
-        panelDatos.setLayout(new BoxLayout(panelDatos, BoxLayout.Y_AXIS));
-        panelDatos.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setBackground(getColorFondo());
+        panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel lblTitulo = new JLabel("MIS DATOS PERSONALES", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
-        lblTitulo.setForeground(getColorTexto());
-        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Obtener empleado actual
         Usuario usuarioActual = controlador.getUsuarioActual();
-        Empleado empleado = usuarioActual != null ? usuarioActual.getEmpleado() : null;
-
-        JTextArea txtDatos = new JTextArea(20, 50);
-        txtDatos.setEditable(false);
-        txtDatos.setFont(new Font("Monospaced", Font.PLAIN, 12));
-
-        if (empleado != null) {
-            txtDatos.setText(usuarioActual.getEmpleado().obtenerDatosEmpleado());
-        } else {
-            txtDatos.setText("No se encontraron datos del empleado.");
+        if (usuarioActual == null || usuarioActual.getEmpleado() == null) {
+            JOptionPane.showMessageDialog(vista, "No se encontraron datos del empleado", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-        JScrollPane scrollPane = new JScrollPane(txtDatos);
+        // Obtener datos frescos del empleado desde el controlador
+        Empleado empleado = controlador.buscarEmpleadoPorId(usuarioActual.getEmpleado().getIdEmpleado());
+        if (empleado == null) {
+            JOptionPane.showMessageDialog(vista, "No se pudieron cargar los datos del empleado", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-        panelDatos.add(lblTitulo);
-        panelDatos.add(Box.createVerticalStrut(20));
-        panelDatos.add(scrollPane);
+        // Sección Información Personal
+        JPanel panelPersonal = crearSeccionPanel("Información Personal", getColorFondo());
+        panelPersonal.setLayout(new java.awt.GridLayout(5, 2, 10, 5));
+        agregarCampoGrid(panelPersonal, "Nombres:", empleado.getNombre());
+        agregarCampoGrid(panelPersonal, "Apellidos:", empleado.getApellidos());
+        agregarCampoGrid(panelPersonal, "DNI:", empleado.getDni());
+        agregarCampoGrid(panelPersonal, "Edad:", String.valueOf(empleado.getEdad()));
+        agregarCampoGrid(panelPersonal, "Teléfono:", empleado.getNumero());
+        agregarCampoGrid(panelPersonal, "Correo:", empleado.getCorreo());
+        agregarCampoGrid(panelPersonal, "Dirección:", empleado.getDireccion());
+        agregarCampoGrid(panelPersonal, "Grado Instrucción:", empleado.getGradoInstruccion());
+        agregarCampoGrid(panelPersonal, "Carrera:", empleado.getCarrera());
+        agregarCampoGrid(panelPersonal, "Comentarios:", empleado.getComentarios());
 
-        panelContenido.add(panelDatos, BorderLayout.CENTER);
+        // Sección Información Laboral
+        JPanel panelLaboral = crearSeccionPanel("Información Laboral", getColorFondo());
+        panelLaboral.setLayout(new java.awt.GridLayout(4, 2, 10, 5));
+        Contrato contrato = empleado.getContrato();
+        if (contrato != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            agregarCampoGrid(panelLaboral, "Tipo Contrato:", contrato.getTipoContrato());
+            agregarCampoGrid(panelLaboral, "Salario Base:", "S/ " + String.format("%.2f", contrato.getSalarioBase()));
+            agregarCampoGrid(panelLaboral, "Fecha Inicio:", contrato.getFechaInicio() != null ? dateFormat.format(contrato.getFechaInicio()) : "N/A");
+            agregarCampoGrid(panelLaboral, "Fecha Fin:", contrato.getFechaFin() != null ? dateFormat.format(contrato.getFechaFin()) : "Indefinido");
+            agregarCampoGrid(panelLaboral, "Bonificación:", "S/ " + String.format("%.2f", contrato.getBonificacion()));
+            agregarCampoGrid(panelLaboral, "Descuento AFP:", "S/ " + String.format("%.2f", contrato.getDescuentoAFP()));
+            agregarCampoGrid(panelLaboral, "Sueldo Neto:", "S/ " + String.format("%.2f", contrato.calcularSueldo()));
+        } else {
+            agregarCampoGrid(panelLaboral, "Tipo Contrato:", "No asignado");
+            agregarCampoGrid(panelLaboral, "Salario Base:", "S/ 0.00");
+            agregarCampoGrid(panelLaboral, "Fecha Inicio:", "N/A");
+            agregarCampoGrid(panelLaboral, "Fecha Fin:", "N/A");
+            agregarCampoGrid(panelLaboral, "Bonificación:", "S/ 0.00");
+            agregarCampoGrid(panelLaboral, "Descuento AFP:", "S/ 0.00");
+            agregarCampoGrid(panelLaboral, "Sueldo Neto:", "S/ 0.00");
+        }
+
+        // Sección Información de Usuario
+        JPanel panelUsuario = crearSeccionPanel("Información de Usuario", getColorFondo());
+        panelUsuario.setLayout(new java.awt.GridLayout(2, 2, 10, 5));
+        agregarCampoGrid(panelUsuario, "Usuario:", usuarioActual.getNombreUsuario());
+        JPanel panelPassword = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelPassword.setBackground(getColorFondo());
+        panelPassword.add(new JLabel("Contraseña:"));
+        JTextField txtPassword = new JTextField("********");
+        txtPassword.setEditable(false);
+        txtPassword.setPreferredSize(new Dimension(120, 25));
+        panelPassword.add(txtPassword);
+        JButton btnVerPassword = new JButton("Mostrar");
+        btnVerPassword.addActionListener(e -> txtPassword.setText(usuarioActual.getContrasena()));
+        panelPassword.add(btnVerPassword);
+        panelUsuario.add(new JLabel(""));
+        panelUsuario.add(panelPassword);
+
+        panelPrincipal.add(panelPersonal);
+        panelPrincipal.add(Box.createVerticalStrut(20));
+        panelPrincipal.add(panelLaboral);
+        panelPrincipal.add(Box.createVerticalStrut(20));
+        panelPrincipal.add(panelUsuario);
+
+        JScrollPane scrollPane = new JScrollPane(panelPrincipal);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        panelContenido.add(scrollPane, BorderLayout.CENTER);
         panelContenido.revalidate();
         panelContenido.repaint();
     }
 
+    /* private void agregarCampo(JPanel panel, String etiqueta, String valor) {
+        JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        fila.setBackground(getColorFondo());
+        fila.add(new JLabel(etiqueta));
+        JTextField campo = new JTextField(valor != null ? valor : "");
+        campo.setEditable(false);
+        campo.setPreferredSize(new Dimension(200, 25));
+        fila.add(campo);
+        panel.add(fila);
+    }*/
+    private JPanel crearSeccionPanel(String titulo, Color colorFondo) {
+        JPanel panelSeccion = new JPanel();
+        panelSeccion.setBackground(colorFondo);
+        panelSeccion.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(),
+                titulo,
+                javax.swing.border.TitledBorder.CENTER,
+                javax.swing.border.TitledBorder.TOP,
+                new Font("Arial", Font.BOLD, 14),
+                getColorTexto()
+        ));
+        panelSeccion.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createEtchedBorder(),
+                        titulo,
+                        javax.swing.border.TitledBorder.CENTER,
+                        javax.swing.border.TitledBorder.TOP,
+                        new Font("Arial", Font.BOLD, 14),
+                        getColorTexto()
+                ),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+        return panelSeccion;
+    }
+
+    private void agregarCampoGrid(JPanel panel, String etiqueta, String valor) {
+        panel.add(new JLabel(etiqueta));
+        JTextField campo = new JTextField(valor != null ? valor : "");
+        campo.setEditable(false);
+        campo.setPreferredSize(new Dimension(150, 25));
+        panel.add(campo);
+    }
+
     private void mostrarPanelEditarDatosPersonales(JPanel panelContenido, DashboardVista vista, TotalTalentControlador controlador) {
+        if (panelContenido == null || vista == null) {
+            return;
+        }
+
         panelContenido.removeAll();
         panelContenido.setLayout(new BorderLayout());
 
-        JPanel panelEditar = new JPanel();
-        panelEditar.setBackground(getColorFondo());
-        panelEditar.setLayout(new BoxLayout(panelEditar, BoxLayout.Y_AXIS));
-        panelEditar.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setBackground(getColorFondo());
+        panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel lblTitulo = new JLabel("EDITAR DATOS PERSONALES", SwingConstants.CENTER);
+        // Título principal
+        JLabel lblTitulo = new JLabel("EDITAR DATOS PERSONALES", JLabel.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
         lblTitulo.setForeground(getColorTexto());
         lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Obtener empleado actual
         Usuario usuarioActual = controlador.getUsuarioActual();
         Empleado empleado = usuarioActual != null ? usuarioActual.getEmpleado() : null;
 
@@ -181,49 +300,107 @@ public class EmpleadoStrategy implements DashboardStrategy {
             return;
         }
 
-        // Formulario de edición
-        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 10, 10));
-        panelFormulario.setBackground(getColorFondo());
-        panelFormulario.setBorder(BorderFactory.createTitledBorder("Información Editable"));
+        // Sección Datos Editables
+        JPanel panelEditable = crearSeccionPanel("Datos Editables", getColorFondo());
+        panelEditable.setLayout(new java.awt.GridLayout(4, 3, 10, 5));
 
-        JTextField txtNumero = new JTextField(empleado.getNumero());
-        JTextField txtCorreo = new JTextField(empleado.getCorreo());
-        JTextField txtDireccion = new JTextField(empleado.getDireccion());
-        JTextField txtGradoInstruccion = new JTextField(empleado.getGradoInstruccion());
-        JTextField txtCarrera = new JTextField(empleado.getCarrera());
-        JTextArea txtComentarios = new JTextArea(empleado.getComentarios(), 3, 20);
+        JTextField txtDireccion = new JTextField(empleado.getDireccion() != null ? empleado.getDireccion() : "");
+        JTextField txtCorreo = new JTextField(empleado.getCorreo() != null ? empleado.getCorreo() : "");
+        JTextField txtTelefono = new JTextField(empleado.getNumero() != null ? empleado.getNumero() : "");
+        JTextField txtGradoInstruccion = new JTextField(empleado.getGradoInstruccion() != null ? empleado.getGradoInstruccion() : "");
 
-        panelFormulario.add(new JLabel("Número:"));
-        panelFormulario.add(txtNumero);
-        panelFormulario.add(new JLabel("Correo:"));
-        panelFormulario.add(txtCorreo);
-        panelFormulario.add(new JLabel("Dirección:"));
-        panelFormulario.add(txtDireccion);
-        panelFormulario.add(new JLabel("Grado Instrucción:"));
-        panelFormulario.add(txtGradoInstruccion);
-        panelFormulario.add(new JLabel("Carrera:"));
-        panelFormulario.add(txtCarrera);
-        panelFormulario.add(new JLabel("Comentarios:"));
-        panelFormulario.add(new JScrollPane(txtComentarios));
+        JCheckBox chkDireccion = new JCheckBox("Actualizar");
+        JCheckBox chkCorreo = new JCheckBox("Actualizar");
+        JCheckBox chkTelefono = new JCheckBox("Actualizar");
+        JCheckBox chkGradoInstruccion = new JCheckBox("Actualizar");
+
+        // Inicialmente deshabilitar los campos de texto
+        txtDireccion.setEditable(false);
+        txtCorreo.setEditable(false);
+        txtTelefono.setEditable(false);
+        txtGradoInstruccion.setEditable(false);
+
+        // Agregar listeners a los checkboxes para habilitar/deshabilitar campos
+        chkDireccion.addActionListener(e -> txtDireccion.setEditable(chkDireccion.isSelected()));
+        chkCorreo.addActionListener(e -> txtCorreo.setEditable(chkCorreo.isSelected()));
+        chkTelefono.addActionListener(e -> txtTelefono.setEditable(chkTelefono.isSelected()));
+        chkGradoInstruccion.addActionListener(e -> txtGradoInstruccion.setEditable(chkGradoInstruccion.isSelected()));
+
+        panelEditable.add(new JLabel("Dirección:"));
+        panelEditable.add(txtDireccion);
+        panelEditable.add(chkDireccion);
+        panelEditable.add(new JLabel("Correo:"));
+        panelEditable.add(txtCorreo);
+        panelEditable.add(chkCorreo);
+        panelEditable.add(new JLabel("Teléfono:"));
+        panelEditable.add(txtTelefono);
+        panelEditable.add(chkTelefono);
+        panelEditable.add(new JLabel("Grado Instrucción:"));
+        panelEditable.add(txtGradoInstruccion);
+        panelEditable.add(chkGradoInstruccion);
+
+        // Panel de botones
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        panelBotones.setBackground(getColorFondo());
 
         JButton btnGuardar = new JButton("Guardar Cambios");
         estilizarBoton(btnGuardar);
+        btnGuardar.setPreferredSize(new Dimension(150, 35));
+
+        JButton btnCancelar = new JButton("Cancelar");
+        estilizarBoton(btnCancelar);
+        btnCancelar.setPreferredSize(new Dimension(120, 35));
 
         btnGuardar.addActionListener(e -> {
             try {
-                // Actualizar datos del empleado
-                empleado.actualizarDireccion(txtDireccion.getText().trim(),
-                        txtCorreo.getText().trim(),
-                        txtNumero.getText().trim());
-                empleado.setGradoInstruccion(txtGradoInstruccion.getText().trim());
-                empleado.setCarrera(txtCarrera.getText().trim());
-                empleado.setComentarios(txtComentarios.getText().trim());
+                boolean actualizado = false;
 
-                // Validaciones
-                if (!Validaciones.validarEmail(empleado.getCorreo())
-                        || !Validaciones.validarTelefono(empleado.getNumero())
-                        || !Validaciones.validarNoVacio(empleado.getDireccion())) {
-                    JOptionPane.showMessageDialog(vista, "Datos inválidos. Verifique email, teléfono y dirección", "Error", JOptionPane.ERROR_MESSAGE);
+                // Actualizar dirección si está seleccionada
+                if (chkDireccion.isSelected()) {
+                    String nuevaDireccion = txtDireccion.getText().trim();
+                    if (!Validaciones.validarNoVacio(nuevaDireccion)) {
+                        JOptionPane.showMessageDialog(vista, "La dirección no puede estar vacía", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    empleado.setDireccion(nuevaDireccion);
+                    actualizado = true;
+                }
+
+                // Actualizar correo si está seleccionado
+                if (chkCorreo.isSelected()) {
+                    String nuevoCorreo = txtCorreo.getText().trim();
+                    if (!Validaciones.validarEmail(nuevoCorreo)) {
+                        JOptionPane.showMessageDialog(vista, "Correo electrónico inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    empleado.setCorreo(nuevoCorreo);
+                    actualizado = true;
+                }
+
+                // Actualizar teléfono si está seleccionado
+                if (chkTelefono.isSelected()) {
+                    String nuevoTelefono = txtTelefono.getText().trim();
+                    if (!Validaciones.validarTelefono(nuevoTelefono)) {
+                        JOptionPane.showMessageDialog(vista, "Teléfono inválido (debe tener 9 dígitos empezando con 9)", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    empleado.setNumero(nuevoTelefono);
+                    actualizado = true;
+                }
+
+                // Actualizar grado de instrucción si está seleccionado
+                if (chkGradoInstruccion.isSelected()) {
+                    String nuevoGradoInstruccion = txtGradoInstruccion.getText().trim();
+                    if (!Validaciones.validarNoVacio(nuevoGradoInstruccion)) {
+                        JOptionPane.showMessageDialog(vista, "El grado de instrucción no puede estar vacío", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    empleado.setGradoInstruccion(nuevoGradoInstruccion);
+                    actualizado = true;
+                }
+
+                if (!actualizado) {
+                    JOptionPane.showMessageDialog(vista, "Seleccione al menos un campo para actualizar", "Advertencia", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
@@ -235,96 +412,103 @@ public class EmpleadoStrategy implements DashboardStrategy {
             }
         });
 
-        JPanel panelBoton = new JPanel(new FlowLayout());
-        panelBoton.setBackground(getColorFondo());
-        panelBoton.add(btnGuardar);
+        btnCancelar.addActionListener(e -> vista.mostrarPanel("Ver Datos Personales"));
 
-        panelEditar.add(lblTitulo);
-        panelEditar.add(Box.createVerticalStrut(20));
-        panelEditar.add(panelFormulario);
-        panelEditar.add(Box.createVerticalStrut(20));
-        panelEditar.add(panelBoton);
+        panelBotones.add(btnCancelar);
+        panelBotones.add(btnGuardar);
 
-        panelContenido.add(panelEditar, BorderLayout.CENTER);
+        panelPrincipal.add(lblTitulo);
+        panelPrincipal.add(Box.createVerticalStrut(20));
+        panelPrincipal.add(panelEditable);
+        panelPrincipal.add(Box.createVerticalStrut(20));
+        panelPrincipal.add(panelBotones);
+
+        JScrollPane scrollPane = new JScrollPane(panelPrincipal);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        panelContenido.add(scrollPane, BorderLayout.CENTER);
         panelContenido.revalidate();
         panelContenido.repaint();
     }
 
+    /*
     private void mostrarPanelMisContratos(JPanel panelContenido, DashboardVista vista, TotalTalentControlador controlador) {
+        if (panelContenido == null || vista == null) {
+            return;
+        }
+
         panelContenido.removeAll();
         panelContenido.setLayout(new BorderLayout());
 
-        JPanel panelContratos = new JPanel();
-        panelContratos.setBackground(getColorFondo());
-        panelContratos.setLayout(new BoxLayout(panelContratos, BoxLayout.Y_AXIS));
-        panelContratos.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-
-        JLabel lblTitulo = new JLabel("MIS CONTRATOS", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
-        lblTitulo.setForeground(getColorTexto());
-        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel panelPrincipal = new JPanel();
+        panelPrincipal.setBackground(getColorFondo());
+        panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Obtener empleado actual
         Usuario usuarioActual = controlador.getUsuarioActual();
         Empleado empleado = usuarioActual != null ? usuarioActual.getEmpleado() : null;
 
-        JTextArea txtContratos = new JTextArea(20, 50);
-        txtContratos.setEditable(false);
-
         if (empleado != null) {
             try {
                 List<Contrato> contratos = controlador.buscarContratosPorEmpleado(empleado.getIdEmpleado());
-                StringBuilder sb = new StringBuilder();
-                sb.append("=== MIS CONTRATOS ===\n\n");
 
                 if (contratos.isEmpty()) {
-                    sb.append("No tienes contratos registrados.");
+                    JPanel panelSinContratos = new JPanel();
+                    panelSinContratos.setBackground(getColorFondo());
+                    panelSinContratos.add(new JLabel("No tienes contratos registrados."));
+                    panelPrincipal.add(panelSinContratos);
                 } else {
-                    for (Contrato contrato : contratos) {
-                        sb.append("Contrato ID: ").append(contrato.getIdContrato()).append("\n");
-                        sb.append("Tipo: ").append(contrato.getTipoContrato()).append("\n");
-                        sb.append("Fecha Inicio: ").append(contrato.getFechaInicio()).append("\n");
-                        sb.append("Fecha Fin: ").append(contrato.getFechaFin() != null ? contrato.getFechaFin() : "Indefinido").append("\n");
-                        sb.append("Salario Base: ").append(contrato.getSalarioBase()).append("\n");
-                        sb.append("Bonificación: ").append(contrato.getBonificacion()).append("\n");
-                        sb.append("Descuento AFP: ").append(contrato.getDescuentoAFP()).append("\n");
-                        sb.append("Sueldo Final: ").append(contrato.calcularSueldo()).append("\n");
-                        sb.append("----------------------------------------\n\n");
+                    // Mostrar cada contrato en una sección separada
+                    for (int i = 0; i < contratos.size(); i++) {
+                        Contrato contrato = contratos.get(i);
+                        JPanel panelContrato = crearSeccionPanel("Contrato #" + (i + 1), getColorFondo());
+                        panelContrato.setLayout(new java.awt.GridLayout(8, 2, 10, 5));
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                        agregarCampoGrid(panelContrato, "ID Contrato:", String.valueOf(contrato.getIdContrato()));
+                        agregarCampoGrid(panelContrato, "Tipo:", contrato.getTipoContrato());
+                        agregarCampoGrid(panelContrato, "Fecha Inicio:", contrato.getFechaInicio() != null ? dateFormat.format(contrato.getFechaInicio()) : "N/A");
+                        agregarCampoGrid(panelContrato, "Fecha Fin:", contrato.getFechaFin() != null ? dateFormat.format(contrato.getFechaFin()) : "Indefinido");
+                        agregarCampoGrid(panelContrato, "Salario Base:", "S/ " + String.format("%.2f", contrato.getSalarioBase()));
+                        agregarCampoGrid(panelContrato, "Bonificación:", "S/ " + String.format("%.2f", contrato.getBonificacion()));
+                        agregarCampoGrid(panelContrato, "Descuento AFP:", "S/ " + String.format("%.2f", contrato.getDescuentoAFP()));
+                        agregarCampoGrid(panelContrato, "Sueldo Neto:", "S/ " + String.format("%.2f", contrato.calcularSueldo()));
+
+                        panelPrincipal.add(panelContrato);
+                        if (i < contratos.size() - 1) {
+                            panelPrincipal.add(Box.createVerticalStrut(15));
+                        }
                     }
                 }
-
-                txtContratos.setText(sb.toString());
             } catch (Exception e) {
-                txtContratos.setText("Error al cargar contratos: " + e.getMessage());
+                JPanel panelError = new JPanel();
+                panelError.setBackground(getColorFondo());
+                panelError.add(new JLabel("Error al cargar contratos: " + e.getMessage()));
+                panelPrincipal.add(panelError);
             }
         } else {
-            txtContratos.setText("No se encontraron datos del empleado.");
+            JPanel panelError = new JPanel();
+            panelError.setBackground(getColorFondo());
+            panelError.add(new JLabel("No se encontraron datos del empleado."));
+            panelPrincipal.add(panelError);
         }
 
-        JScrollPane scrollPane = new JScrollPane(txtContratos);
+        JScrollPane scrollPane = new JScrollPane(panelPrincipal);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        panelContratos.add(lblTitulo);
-        panelContratos.add(Box.createVerticalStrut(20));
-        panelContratos.add(scrollPane);
-
-        panelContenido.add(panelContratos, BorderLayout.CENTER);
+        panelContenido.add(scrollPane, BorderLayout.CENTER);
         panelContenido.revalidate();
         panelContenido.repaint();
     }
 
-    private void estilizarBoton(JButton boton) {
-        boton.setBackground(getColorBoton());
-        boton.setForeground(getColorTexto());
+    
+     */
+    public void estilizarBoton(JButton boton) {
         boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createRaisedBevelBorder());
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                boton.setBackground(getColorBotonHover());
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                boton.setBackground(getColorBoton());
-            }
-        });
+        boton.setBackground(getColorBotonHover());
     }
 }

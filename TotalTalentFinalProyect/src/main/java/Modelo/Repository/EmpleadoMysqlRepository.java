@@ -1,5 +1,6 @@
 package Modelo.Repository;
 
+import Modelo.Contrato;
 import Modelo.Empleado;
 import Modelo.Rol;
 import java.sql.Connection;
@@ -53,21 +54,17 @@ public class EmpleadoMysqlRepository implements EmpleadoRepository {
     @Override
     // Método para actualizar un empleado existente
     public void actualizar(Empleado empleado) {
-        String sql = "UPDATE empleado SET nombre = ?, apellidos = ?, edad = ?, numero = ?, correo = ?, "
-                + "direccion = ?, grado_instruccion = ?, carrera = ?, comentarios = ?, rol = ? WHERE id_empleado = ?";
+        String sql = "UPDATE empleado SET nombre = ?, apellidos = ?, numero = ?, correo = ?, "
+                + "direccion = ?, grado_instruccion = ? WHERE id_empleado = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             // Asignar los valores del empleado al PreparedStatement
             stmt.setString(1, empleado.getNombre());
             stmt.setString(2, empleado.getApellidos());
-            stmt.setInt(3, empleado.getEdad());
-            stmt.setString(4, empleado.getNumero());
-            stmt.setString(5, empleado.getCorreo());
-            stmt.setString(6, empleado.getDireccion());
-            stmt.setString(7, empleado.getGradoInstruccion());
-            stmt.setString(8, empleado.getCarrera());
-            stmt.setString(9, empleado.getComentarios());
-            stmt.setString(10, empleado.getRol().toString());
-            stmt.setInt(11, empleado.getIdEmpleado());
+            stmt.setString(3, empleado.getNumero());
+            stmt.setString(4, empleado.getCorreo());
+            stmt.setString(5, empleado.getDireccion());
+            stmt.setString(6, empleado.getGradoInstruccion());
+            stmt.setInt(7, empleado.getIdEmpleado());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error al actualizar empleado: " + e.getMessage());
@@ -124,6 +121,8 @@ public class EmpleadoMysqlRepository implements EmpleadoRepository {
     }
 
     @Override
+
+    
     /// Método para buscar empleados por rol
     public List<Empleado> buscarPorRol(String rol) {
         List<Empleado> empleados = new ArrayList<>(); // Inicializar la lista de empleados
@@ -203,7 +202,7 @@ public class EmpleadoMysqlRepository implements EmpleadoRepository {
     }
 
     // Método auxiliar para mapear ResultSet a objeto Empleado
-    private Empleado mapearEmpleado(ResultSet rs) throws SQLException { 
+    private Empleado mapearEmpleado(ResultSet rs) throws SQLException {
         Empleado empleado = new Empleado(); // Crear una nueva instancia de Empleado
         empleado.setIdEmpleado(rs.getInt("id_empleado")); // Asignar el ID del empleado
         empleado.setNombre(rs.getString("nombre")); // Asignar el nombre del empleado
@@ -217,6 +216,61 @@ public class EmpleadoMysqlRepository implements EmpleadoRepository {
         empleado.setCarrera(rs.getString("carrera"));
         empleado.setComentarios(rs.getString("comentarios"));
         empleado.setRol(Rol.valueOf(rs.getString("rol")));
+
+        // Cargar el contrato activo del empleado
+        cargarContratoActivo(empleado);
+
         return empleado;
+    }
+
+    // Método auxiliar para cargar el contrato activo del empleado
+    private void cargarContratoActivo(Empleado empleado) throws SQLException {
+        String sql = "SELECT c.*, e.nombre, e.apellidos FROM contrato c "
+                + "JOIN empleado e ON c.id_empleado = e.id_empleado "
+                + "WHERE c.id_empleado = ? AND (c.fecha_fin IS NULL OR c.fecha_fin >= CURDATE()) "
+                + "ORDER BY c.fecha_inicio DESC LIMIT 1";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, empleado.getIdEmpleado());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Mapear el contrato usando el método auxiliar del ContratoRepository
+                    Contrato contrato = mapearContrato(rs);
+                    empleado.setContrato(contrato);
+                }
+            }
+        }
+    }
+
+    // Método auxiliar para mapear ResultSet a objeto Contrato (copiado de ContratoMysqlRepository)
+    private Contrato mapearContrato(ResultSet rs) throws SQLException {
+        Modelo.Factory.ContratoFactory factory = new Modelo.Factory.ContratoFactory();
+        String tipoContrato = rs.getString("tipo_contrato");
+        Contrato contrato = factory.crearContrato(tipoContrato);
+
+        contrato.setIdContrato(rs.getInt("id_contrato"));
+        contrato.getEmpleado().setIdEmpleado(rs.getInt("id_empleado"));
+        contrato.getEmpleado().setNombre(rs.getString("nombre"));
+        contrato.getEmpleado().setApellidos(rs.getString("apellidos"));
+        contrato.setFechaInicio(rs.getDate("fecha_inicio"));
+        contrato.setFechaFin(rs.getDate("fecha_fin"));
+        contrato.setSalarioBase(rs.getBigDecimal("salario_base").doubleValue());
+        contrato.setBonificacion(rs.getBigDecimal("bonificacion").doubleValue());
+        contrato.setDescuentoAFP(rs.getBigDecimal("descuento_afp").doubleValue());
+
+        // Mapear campos específicos según el tipo
+        if (contrato instanceof Modelo.Factory.ContratoPlanilla) {
+            Modelo.Factory.ContratoPlanilla cp = (Modelo.Factory.ContratoPlanilla) contrato;
+            cp.setHorasExtras(rs.getBigDecimal("horas_extras").doubleValue());
+        } else if (contrato instanceof Modelo.Factory.ContratoParcial) {
+            Modelo.Factory.ContratoParcial cp = (Modelo.Factory.ContratoParcial) contrato;
+            cp.setHorasTrabajadas(rs.getInt("horas_trabajadas"));
+            cp.setPagoPorHora(rs.getBigDecimal("pago_por_hora").doubleValue());
+        } else if (contrato instanceof Modelo.Factory.ContratoLocacion) {
+            Modelo.Factory.ContratoLocacion cl = (Modelo.Factory.ContratoLocacion) contrato;
+            cl.setMontoPorProyecto(rs.getBigDecimal("monto_por_proyecto").doubleValue());
+            cl.setNumeroProyectos(rs.getInt("numero_proyectos"));
+        }
+
+        return contrato;
     }
 }

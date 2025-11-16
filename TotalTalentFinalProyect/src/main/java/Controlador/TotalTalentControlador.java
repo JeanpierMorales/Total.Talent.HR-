@@ -1,12 +1,13 @@
 package Controlador;
 
+import java.util.List;
+import java.util.Scanner;
+
+import Modelo.Contrato;
+import Modelo.Empleado;
 import Modelo.Facade.Facade;
 import Modelo.Rol;
 import Modelo.Usuario;
-import Modelo.Empleado;
-import Modelo.Contrato;
-import java.util.List;
-import java.util.Scanner;
 
 // Controlador principal del sistema Total Talent HR
 // Maneja la lógica de negocio y coordina las operaciones entre modelo y vista
@@ -26,7 +27,7 @@ public class TotalTalentControlador {
     // Método para manejar el login del usuario con límite de intentos
     public boolean login(String nombreUsuario, String contrasena) {
         if (intentosLogin >= 3) {
-            System.out.println("Demasiados intentos fallidos. Sistema bloqueado.");
+            // Demasiados intentos fallidos: comportamiento silencioso en GUI
             return false;
         }
 
@@ -35,7 +36,7 @@ public class TotalTalentControlador {
             intentosLogin = 0; // Resetear intentos en login exitoso
         } else {
             intentosLogin++;
-            System.out.println("Intento fallido " + intentosLogin + " de 3.");
+            // Intento fallido: el feedback se muestra en la vista (GUI), no por consola
         }
         return exito;
     }
@@ -59,7 +60,7 @@ public class TotalTalentControlador {
     public void mostrarDashboardSegunRol() {
         Usuario usuarioActual = facade.getUsuarioActual();
         if (usuarioActual == null) {
-            System.out.println("No hay usuario logueado.");
+            // No hay usuario logueado: no imprimir en consola (GUI maneja el flujo)
             return;
         }
 
@@ -79,7 +80,7 @@ public class TotalTalentControlador {
                 mostrarMenuEmpleado();
                 break;
             default:
-                System.out.println("Rol no reconocido.");
+            // Rol no reconocido: manejar en la UI si corresponde
         }
     }
 
@@ -87,16 +88,7 @@ public class TotalTalentControlador {
     private void mostrarMenuAdministrador() {
         boolean continuar = true;
         while (continuar) {
-            System.out.println("\n=== DASHBOARD ADMINISTRADOR ===");
-            System.out.println("Funciones disponibles:");
-            System.out.println("1. Gestionar usuarios");
-            System.out.println("2. Gestionar empleados");
-            System.out.println("3. Gestionar contratos");
-            System.out.println("4. Ver logs del sistema");
-            System.out.println("5. Generar reportes");
-            System.out.println("6. Ver estadísticas");
-            System.out.println("7. Cerrar sesión");
-            System.out.print("Seleccione una opción: ");
+            // Menú de administración (modo consola) - sin salida por consola en modo GUI
 
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea
@@ -126,10 +118,10 @@ public class TotalTalentControlador {
                         continuar = false;
                         break;
                     default:
-                        System.out.println("Opción no válida.");
+                    // Opción no válida (modo consola)
                 }
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                // Error en la operación: el mensaje se puede propagar a la UI si es necesario
             }
         }
     }
@@ -138,15 +130,7 @@ public class TotalTalentControlador {
     private void mostrarMenuReclutador() {
         boolean continuar = true;
         while (continuar) {
-            System.out.println("\n=== DASHBOARD RECLUTADOR ===");
-            System.out.println("Funciones disponibles:");
-            System.out.println("1. Gestionar empleados");
-            System.out.println("2. Gestionar contratos");
-            System.out.println("3. Buscar candidatos");
-            System.out.println("4. Ver reportes");
-            System.out.println("5. Ver estadísticas");
-            System.out.println("6. Cerrar sesión");
-            System.out.print("Seleccione una opción: ");
+            // Menú de reclutador (modo consola) - sin salida por consola en modo GUI
 
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea
@@ -173,10 +157,10 @@ public class TotalTalentControlador {
                         continuar = false;
                         break;
                     default:
-                        System.out.println("Opción no válida.");
+                    // Opción no válida (modo consola)
                 }
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                // Error en operación (modo consola)
             }
         }
     }
@@ -185,15 +169,7 @@ public class TotalTalentControlador {
     private void mostrarMenuGerente() {
         boolean continuar = true;
         while (continuar) {
-            System.out.println("\n=== DASHBOARD GERENTE ===");
-            System.out.println("Funciones disponibles:");
-            System.out.println("1. Ver reportes");
-            System.out.println("2. Gestionar contratos");
-            System.out.println("3. Ver métricas");
-            System.out.println("4. Ver estadísticas");
-            System.out.println("5. Gestionar empleados");
-            System.out.println("6. Cerrar sesión");
-            System.out.print("Seleccione una opción: ");
+            // Menú de gerente (modo consola) - sin salida por consola en modo GUI
 
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea
@@ -220,10 +196,10 @@ public class TotalTalentControlador {
                         continuar = false;
                         break;
                     default:
-                        System.out.println("Opción no válida.");
+                    // Opción no válida (modo consola)
                 }
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                // Error en operación (modo consola)
             }
         }
     }
@@ -232,14 +208,7 @@ public class TotalTalentControlador {
     private void mostrarMenuEmpleado() {
         boolean continuar = true;
         while (continuar) {
-            System.out.println("\n=== DASHBOARD EMPLEADO ===");
-            System.out.println("Funciones disponibles:");
-            System.out.println("1. Ver mis datos");
-            System.out.println("2. Actualizar información personal");
-            System.out.println("3. Ver mis contratos");
-            System.out.println("4. Ver estadísticas");
-            System.out.println("5. Cerrar sesión");
-            System.out.print("Seleccione una opción: ");
+            // Menú de empleado (modo consola) - sin salida por consola en modo GUI
 
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea
@@ -263,10 +232,10 @@ public class TotalTalentControlador {
                         continuar = false;
                         break;
                     default:
-                        System.out.println("Opción no válida.");
+                    // Opción no válida (modo consola)
                 }
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
+                // Error en operación (modo consola)
             }
         }
     }

@@ -1,18 +1,46 @@
 package Vista.Strategy;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+
 import Controlador.TotalTalentControlador;
-import Modelo.Empleado;
 import Modelo.Contrato;
+import Modelo.Empleado;
 import Modelo.Rol;
 import Modelo.Usuario;
 import Utilidades.Validaciones;
 import Vista.DashboardVista;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 // Estrategia específica para el rol de Administrador
 // Implementa funcionalidades completas de gestión del sistema
@@ -159,22 +187,22 @@ public class AdminStrategy implements DashboardStrategy {
         panelBotones.setBackground(getColorFondo());
 
         JButton btnAgregar = new JButton("Agregar Usuario");
-        JButton btnEditar = new JButton("Editar Usuario");
+        // JButton btnEditar = new JButton("Editar Usuario");
         JButton btnEliminar = new JButton("Eliminar Usuario");
         JButton btnRefrescar = new JButton("Refrescar");
 
         estilizarBoton(btnAgregar);
-        estilizarBoton(btnEditar);
+        // estilizarBoton(btnEditar);
         estilizarBoton(btnEliminar);
         estilizarBoton(btnRefrescar);
 
         btnAgregar.addActionListener(e -> mostrarDialogoAgregarUsuario(controlador, vista));
-        btnEditar.addActionListener(e -> mostrarDialogoEditarUsuario(controlador, vista));
+        // btnEditar.addActionListener(e -> mostrarDialogoEditarUsuario(controlador, vista));
         btnEliminar.addActionListener(e -> eliminarUsuario(controlador, vista));
         btnRefrescar.addActionListener(e -> mostrarPanelGestionUsuarios(panelContenido, vista, controlador));
 
         panelBotones.add(btnAgregar);
-        panelBotones.add(btnEditar);
+        // panelBotones.add(btnEditar);
         panelBotones.add(btnEliminar);
         panelBotones.add(btnRefrescar);
 
@@ -327,6 +355,7 @@ public class AdminStrategy implements DashboardStrategy {
         dialogo.setVisible(true);
     }
 
+    /*
     private void mostrarDialogoEditarUsuario(TotalTalentControlador controlador, DashboardVista vista) {
         JTable tablaUsuarios = vista.getTablaSeleccionada();
         // Obtener el usuario seleccionado de la tabla
@@ -439,8 +468,7 @@ public class AdminStrategy implements DashboardStrategy {
         dialogo.add(panelBotones);
 
         dialogo.setVisible(true);
-    }
-
+    }*/
     private void eliminarUsuario(TotalTalentControlador controlador, DashboardVista vista) {
         JTable tablaUsuarios = vista.getTablaSeleccionada();
         // Obtener el usuario seleccionado de la tabla
@@ -518,6 +546,7 @@ public class AdminStrategy implements DashboardStrategy {
         JTable tablaEmpleados = new JTable(modeloTabla);
         tablaEmpleados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaEmpleados.getTableHeader().setReorderingAllowed(false);
+        vista.setTablaSeleccionada(tablaEmpleados);
 
         // Cargar datos ordenados por ID
         try {
@@ -794,27 +823,23 @@ public class AdminStrategy implements DashboardStrategy {
         dialogo.setSize(400, 200);
         dialogo.setLocationRelativeTo(vista);
 
-        JTextField txtNombre = new JTextField();
-        JTextField txtApellidos = new JTextField();
-        JTextField txtDni = new JTextField();
+        JComboBox<String> cbCriterio = new JComboBox<>(new String[]{"Nombre", "Apellidos", "DNI"});
+        JTextField txtValor = new JTextField();
 
-        dialogo.add(new JLabel("Nombre:"));
-        dialogo.add(txtNombre);
-        dialogo.add(new JLabel("Apellidos:"));
-        dialogo.add(txtApellidos);
-        dialogo.add(new JLabel("DNI:"));
-        dialogo.add(txtDni);
+        dialogo.add(new JLabel("Buscar empleado por:"));
+        dialogo.add(cbCriterio);
+        dialogo.add(new JLabel("Ingresa el dato acá:"));
+        dialogo.add(txtValor);
 
         JButton btnBuscar = new JButton("Buscar");
         JButton btnCancelar = new JButton("Cancelar");
 
         btnBuscar.addActionListener(e -> {
-            String nombre = txtNombre.getText().trim();
-            String apellidos = txtApellidos.getText().trim();
-            String dni = txtDni.getText().trim();
+            String criterio = (String) cbCriterio.getSelectedItem();
+            String valor = txtValor.getText().trim();
 
-            if (nombre.isEmpty() && apellidos.isEmpty() && dni.isEmpty()) {
-                JOptionPane.showMessageDialog(dialogo, "Ingrese al menos un criterio de búsqueda", "Error", JOptionPane.ERROR_MESSAGE);
+            if (valor.isEmpty()) {
+                JOptionPane.showMessageDialog(dialogo, "Ingrese un valor para buscar", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -823,16 +848,24 @@ public class AdminStrategy implements DashboardStrategy {
                 List<Empleado> resultados = new java.util.ArrayList<>();
 
                 for (Empleado emp : empleados) {
-                    boolean coincide = true;
+                    boolean coincide = false;
 
-                    if (!nombre.isEmpty() && !emp.getNombre().toLowerCase().contains(nombre.toLowerCase())) {
-                        coincide = false;
-                    }
-                    if (!apellidos.isEmpty() && !emp.getApellidos().toLowerCase().contains(apellidos.toLowerCase())) {
-                        coincide = false;
-                    }
-                    if (!dni.isEmpty() && !emp.getDni().equals(dni)) {
-                        coincide = false;
+                    switch (criterio) {
+                        case "Nombre":
+                            if (emp.getNombre().toLowerCase().contains(valor.toLowerCase())) {
+                                coincide = true;
+                            }
+                            break;
+                        case "Apellidos":
+                            if (emp.getApellidos().toLowerCase().contains(valor.toLowerCase())) {
+                                coincide = true;
+                            }
+                            break;
+                        case "DNI":
+                            if (emp.getDni().equals(valor)) {
+                                coincide = true;
+                            }
+                            break;
                     }
 
                     if (coincide) {
@@ -891,29 +924,12 @@ public class AdminStrategy implements DashboardStrategy {
         lblTitulo.setForeground(getColorTexto());
         lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Botones CRUD
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        panelBotones.setBackground(getColorFondo());
-
-        JButton btnAgregar = new JButton("Agregar Contrato");
-        JButton btnEditar = new JButton("Editar Contrato");
-        JButton btnEliminar = new JButton("Eliminar Contrato");
-        JButton btnBuscar = new JButton("Buscar Contrato");
-
-        estilizarBoton(btnAgregar);
-        estilizarBoton(btnEditar);
-        estilizarBoton(btnEliminar);
-        estilizarBoton(btnBuscar);
-
-        btnAgregar.addActionListener(e -> mostrarDialogoAgregarContrato(controlador, vista));
-        btnEditar.addActionListener(e -> mostrarDialogoEditarContrato(controlador, vista));
-        btnEliminar.addActionListener(e -> eliminarContrato(controlador, vista));
-        btnBuscar.addActionListener(e -> mostrarDialogoBuscarContrato(controlador, vista));
-
-        panelBotones.add(btnAgregar);
-        panelBotones.add(btnEditar);
-        panelBotones.add(btnEliminar);
-        panelBotones.add(btnBuscar);
+        // Filtro por tipo de contrato
+        JPanel panelFiltro = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelFiltro.setBackground(getColorFondo());
+        panelFiltro.add(new JLabel("Filtrar por tipo:"));
+        JComboBox<String> cbFiltroTipo = new JComboBox<>(new String[]{"Todos", "Parcial", "Planilla", "Locación"});
+        panelFiltro.add(cbFiltroTipo);
 
         // Tabla de contratos
         DefaultTableModel modeloTabla = new DefaultTableModel(new String[]{"ID", "Tipo", "Empleado", "Salario Base", "Fecha Inicio"}, 0) {
@@ -925,28 +941,147 @@ public class AdminStrategy implements DashboardStrategy {
         JTable tablaContratos = new JTable(modeloTabla);
         tablaContratos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tablaContratos.getTableHeader().setReorderingAllowed(false);
+        vista.setTablaSeleccionada(tablaContratos);
 
-        // Cargar datos ordenados por ID
-        try {
-            List<Contrato> contratos = controlador.obtenerTodosContratos();
-            contratos = contratos.stream().sorted(Comparator.comparing(Contrato::getIdContrato)).collect(Collectors.toList());
-            for (Contrato cont : contratos) {
-                modeloTabla.addRow(new Object[]{
-                    cont.getIdContrato(),
-                    cont.getTipoContrato(),
-                    cont.getEmpleado() != null ? cont.getEmpleado().getNombre() + " " + cont.getEmpleado().getApellidos() : "Sin asignar",
-                    cont.getSalarioBase(),
-                    cont.getFechaInicio()
-                });
+        // Función para cargar contratos con filtro
+        Runnable cargarContratos = () -> {
+            modeloTabla.setRowCount(0);
+            try {
+                List<Contrato> contratos = controlador.obtenerTodosContratos();
+                String filtroTipo = (String) cbFiltroTipo.getSelectedItem();
+                if (!"Todos".equals(filtroTipo)) {
+                    contratos = contratos.stream()
+                            .filter(c -> filtroTipo.equals(c.getTipoContrato()))
+                            .collect(Collectors.toList());
+                }
+                contratos = contratos.stream().sorted(Comparator.comparing(Contrato::getIdContrato)).collect(Collectors.toList());
+                for (Contrato cont : contratos) {
+                    modeloTabla.addRow(new Object[]{
+                        cont.getIdContrato(),
+                        cont.getTipoContrato(),
+                        cont.getEmpleado() != null ? cont.getEmpleado().getNombre() + " " + cont.getEmpleado().getApellidos() : "Sin asignar",
+                        cont.getSalarioBase(),
+                        cont.getFechaInicio()
+                    });
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(vista, "Error al cargar contratos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(vista, "Error al cargar contratos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        };
+
+        // Botones CRUD
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        panelBotones.setBackground(getColorFondo());
+
+        JButton btnAgregar = new JButton("Agregar Contrato");
+        JButton btnEditar = new JButton("Editar Contrato");
+        JButton btnEliminar = new JButton("Eliminar Contrato");
+
+        estilizarBoton(btnAgregar);
+        estilizarBoton(btnEditar);
+        estilizarBoton(btnEliminar);
+
+        btnAgregar.addActionListener(e -> mostrarDialogoAgregarContrato(controlador, vista));
+        btnEditar.addActionListener(e -> mostrarDialogoEditarContrato(controlador, vista));
+        btnEliminar.addActionListener(e -> eliminarContrato(controlador, vista));
+
+        panelBotones.add(btnAgregar);
+        panelBotones.add(btnEditar);
+        panelBotones.add(btnEliminar);
+
+        // Panel de búsqueda
+        JPanel panelSearch = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelSearch.setBackground(getColorFondo());
+        JComboBox<String> cbCriterioBusqueda = new JComboBox<>(new String[]{"ID", "Nombre Empleado", "Tipo Contrato"});
+        JTextField txtValorBusqueda = new JTextField(15);
+        JButton btnBuscar = new JButton("Buscar");
+        JButton btnRefrescar = new JButton("Refrescar");
+        estilizarBoton(btnBuscar);
+        estilizarBoton(btnRefrescar);
+
+        btnBuscar.addActionListener(e -> {
+            String criterio = (String) cbCriterioBusqueda.getSelectedItem();
+            String valor = txtValorBusqueda.getText().trim();
+            modeloTabla.setRowCount(0);
+            try {
+                List<Contrato> contratos = controlador.obtenerTodosContratos();
+                String filtroTipo = (String) cbFiltroTipo.getSelectedItem();
+                if (!"Todos".equals(filtroTipo)) {
+                    contratos = contratos.stream()
+                            .filter(c -> filtroTipo.equals(c.getTipoContrato()))
+                            .collect(Collectors.toList());
+                }
+                for (Contrato cont : contratos) {
+                    boolean coincide = false;
+                    if (valor.isEmpty()) {
+                        coincide = true;
+                    } else {
+                        switch (criterio) {
+                            case "ID":
+                                try {
+                                    int idBuscado = Integer.parseInt(valor);
+                                    if (cont.getIdContrato() == idBuscado) {
+                                        coincide = true;
+                                    }
+                                } catch (NumberFormatException ex) {
+                                    // ID no válido
+                                }
+                                break;
+                            case "Nombre Empleado":
+                                if (cont.getEmpleado() != null
+                                        && (cont.getEmpleado().getNombre().toLowerCase().contains(valor.toLowerCase())
+                                        || cont.getEmpleado().getApellidos().toLowerCase().contains(valor.toLowerCase()))) {
+                                    coincide = true;
+                                }
+                                break;
+                            case "Tipo Contrato":
+                                if (cont.getTipoContrato().toLowerCase().contains(valor.toLowerCase())) {
+                                    coincide = true;
+                                }
+                                break;
+                        }
+                    }
+                    if (coincide) {
+                        modeloTabla.addRow(new Object[]{
+                            cont.getIdContrato(),
+                            cont.getTipoContrato(),
+                            cont.getEmpleado() != null ? cont.getEmpleado().getNombre() + " " + cont.getEmpleado().getApellidos() : "Sin asignar",
+                            cont.getSalarioBase(),
+                            cont.getFechaInicio()
+                        });
+                    }
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(vista, "Error al buscar contratos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        btnRefrescar.addActionListener(e -> {
+            txtValorBusqueda.setText("");
+            cbCriterioBusqueda.setSelectedIndex(0);
+            cargarContratos.run();
+        });
+
+        panelSearch.add(new JLabel("Buscar por:"));
+        panelSearch.add(cbCriterioBusqueda);
+        panelSearch.add(txtValorBusqueda);
+        panelSearch.add(btnBuscar);
+        panelSearch.add(btnRefrescar);
+
+        // Cargar inicial
+        cargarContratos.run();
+
+        // Listener para filtro
+        cbFiltroTipo.addActionListener(e -> cargarContratos.run());
 
         JScrollPane scrollPane = new JScrollPane(tablaContratos);
 
         panelGestion.add(lblTitulo);
         panelGestion.add(Box.createVerticalStrut(20));
+        panelGestion.add(panelFiltro);
+        panelGestion.add(Box.createVerticalStrut(10));
+        panelGestion.add(panelSearch);
+        panelGestion.add(Box.createVerticalStrut(10));
         panelGestion.add(panelBotones);
         panelGestion.add(Box.createVerticalStrut(20));
         panelGestion.add(scrollPane);
@@ -957,19 +1092,480 @@ public class AdminStrategy implements DashboardStrategy {
     }
 
     private void mostrarDialogoAgregarContrato(TotalTalentControlador controlador, DashboardVista vista) {
-        JOptionPane.showMessageDialog(vista, "Funcionalidad de agregar contrato en desarrollo", "Información", JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialogo = new JDialog((JFrame) SwingUtilities.getWindowAncestor(vista), "Agregar Contrato", true);
+        dialogo.setLayout(new GridLayout(15, 2, 10, 10));
+        dialogo.setSize(500, 600);
+        dialogo.setLocationRelativeTo(vista);
+
+        // Campos comunes
+        JComboBox<String> cbTipoContrato = new JComboBox<>(new String[]{"Parcial", "Planilla", "Locación"});
+        JComboBox<String> cbEmpleados = new JComboBox<>();
+        JTextField txtSalarioBase = new JTextField();
+        JTextField txtBonificacion = new JTextField("0");
+        JTextField txtDescuentoAFP = new JTextField("0");
+        JSpinner spFechaInicio = new JSpinner(new SpinnerDateModel());
+        JSpinner spFechaFin = new JSpinner(new SpinnerDateModel());
+        JCheckBox chkFechaFinIndefinida = new JCheckBox("Fecha fin indefinida");
+
+        // Campos específicos
+        JTextField txtHorasTrabajadas = new JTextField();
+        JTextField txtPagoPorHora = new JTextField();
+        JTextField txtHorasExtras = new JTextField();
+        JTextField txtNumeroProyectos = new JTextField();
+        JTextField txtMontoPorProyecto = new JTextField();
+
+        // Cargar empleados
+        try {
+            List<Empleado> empleados = controlador.obtenerTodosEmpleados();
+            for (Empleado emp : empleados) {
+                cbEmpleados.addItem(emp.getIdEmpleado() + " - " + emp.getNombre() + " " + emp.getApellidos());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(dialogo, "Error al cargar empleados: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Configurar spinners de fecha
+        JSpinner.DateEditor editorInicio = new JSpinner.DateEditor(spFechaInicio, "yyyy-MM-dd");
+        spFechaInicio.setEditor(editorInicio);
+        JSpinner.DateEditor editorFin = new JSpinner.DateEditor(spFechaFin, "yyyy-MM-dd");
+        spFechaFin.setEditor(editorFin);
+
+        // Listener para tipo de contrato
+        cbTipoContrato.addActionListener(e -> {
+            String tipo = (String) cbTipoContrato.getSelectedItem();
+            txtHorasTrabajadas.setEnabled("Parcial".equals(tipo));
+            txtPagoPorHora.setEnabled("Parcial".equals(tipo));
+            txtHorasExtras.setEnabled("Planilla".equals(tipo));
+            txtNumeroProyectos.setEnabled("Locación".equals(tipo));
+            txtMontoPorProyecto.setEnabled("Locación".equals(tipo));
+        });
+
+        // Listener para checkbox indefinida
+        chkFechaFinIndefinida.addActionListener(e -> spFechaFin.setEnabled(!chkFechaFinIndefinida.isSelected()));
+
+        // Agregar componentes
+        dialogo.add(new JLabel("Tipo de Contrato:*"));
+        dialogo.add(cbTipoContrato);
+        dialogo.add(new JLabel("Empleado:*"));
+        dialogo.add(cbEmpleados);
+        dialogo.add(new JLabel("Salario Base:*"));
+        dialogo.add(txtSalarioBase);
+        dialogo.add(new JLabel("Bonificación:"));
+        dialogo.add(txtBonificacion);
+        dialogo.add(new JLabel("Descuento AFP:"));
+        dialogo.add(txtDescuentoAFP);
+        dialogo.add(new JLabel("Fecha Inicio:*"));
+        dialogo.add(spFechaInicio);
+        dialogo.add(new JLabel("Fecha Fin:"));
+        dialogo.add(spFechaFin);
+        dialogo.add(new JLabel(""));
+        dialogo.add(chkFechaFinIndefinida);
+
+        // Campos específicos
+        dialogo.add(new JLabel("Horas Trabajadas (Parcial):"));
+        dialogo.add(txtHorasTrabajadas);
+        dialogo.add(new JLabel("Pago por Hora (Parcial):"));
+        dialogo.add(txtPagoPorHora);
+        dialogo.add(new JLabel("Horas Extras (Planilla):"));
+        dialogo.add(txtHorasExtras);
+        dialogo.add(new JLabel("Número de Proyectos (Locación):"));
+        dialogo.add(txtNumeroProyectos);
+        dialogo.add(new JLabel("Monto por Proyecto (Locación):"));
+        dialogo.add(txtMontoPorProyecto);
+
+        // Botones
+        JButton btnGuardar = new JButton("Guardar");
+        JButton btnCancelar = new JButton("Cancelar");
+
+        btnGuardar.addActionListener(e -> {
+            try {
+                // Validaciones básicas
+                if (cbEmpleados.getSelectedItem() == null) {
+                    JOptionPane.showMessageDialog(dialogo, "Seleccione un empleado", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (txtSalarioBase.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(dialogo, "Ingrese el salario base", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Crear contrato usando factory
+                Modelo.Contrato contrato = Modelo.Factory.ContratoFactory.crearContrato((String) cbTipoContrato.getSelectedItem());
+
+                // Asignar empleado
+                int idEmpleado = Integer.parseInt(((String) cbEmpleados.getSelectedItem()).split(" - ")[0]);
+                contrato.setEmpleado(controlador.buscarEmpleadoPorId(idEmpleado));
+
+                // Campos comunes
+                contrato.setSalarioBase(Double.parseDouble(txtSalarioBase.getText().trim()));
+                contrato.setBonificacion(Double.parseDouble(txtBonificacion.getText().trim()));
+                contrato.setDescuentoAFP(Double.parseDouble(txtDescuentoAFP.getText().trim()));
+                contrato.setFechaInicio((java.util.Date) spFechaInicio.getValue());
+                if (!chkFechaFinIndefinida.isSelected()) {
+                    contrato.setFechaFin((java.util.Date) spFechaFin.getValue());
+                }
+
+                // Campos específicos según tipo
+                String tipo = (String) cbTipoContrato.getSelectedItem();
+                if ("Parcial".equals(tipo)) {
+                    Modelo.Factory.ContratoParcial cp = (Modelo.Factory.ContratoParcial) contrato;
+                    cp.setHorasTrabajadas(Integer.parseInt(txtHorasTrabajadas.getText().trim()));
+                    cp.setPagoPorHora(Double.parseDouble(txtPagoPorHora.getText().trim()));
+                } else if ("Planilla".equals(tipo)) {
+                    Modelo.Factory.ContratoPlanilla cp = (Modelo.Factory.ContratoPlanilla) contrato;
+                    cp.setHorasExtras(Double.parseDouble(txtHorasExtras.getText().trim()));
+                } else if ("Locación".equals(tipo)) {
+                    Modelo.Factory.ContratoLocacion cl = (Modelo.Factory.ContratoLocacion) contrato;
+                    cl.setNumeroProyectos(Integer.parseInt(txtNumeroProyectos.getText().trim()));
+                    cl.setMontoPorProyecto(Double.parseDouble(txtMontoPorProyecto.getText().trim()));
+                }
+
+                controlador.guardarContrato(contrato);
+                JOptionPane.showMessageDialog(dialogo, "Contrato agregado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                dialogo.dispose();
+                vista.mostrarPanel("Gestionar Contratos");
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialogo, "Error al agregar contrato: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCancelar);
+
+        dialogo.add(new JLabel()); // Espacio vacío
+        dialogo.add(panelBotones);
+
+        // Inicializar campos específicos
+        cbTipoContrato.setSelectedIndex(0);
+
+        dialogo.setVisible(true);
     }
 
     private void mostrarDialogoEditarContrato(TotalTalentControlador controlador, DashboardVista vista) {
-        JOptionPane.showMessageDialog(vista, "Funcionalidad de editar contrato en desarrollo", "Información", JOptionPane.INFORMATION_MESSAGE);
+        JTable tabla = vista.getTablaSeleccionada();
+        if (tabla == null || tabla.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(vista, "Seleccione un contrato para editar", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int idContrato = (Integer) tabla.getValueAt(tabla.getSelectedRow(), 0);
+        Modelo.Contrato contratoExistente;
+        try {
+            contratoExistente = controlador.buscarContratoPorId(idContrato);
+            if (contratoExistente == null) {
+                JOptionPane.showMessageDialog(vista, "Contrato no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(vista, "Error al buscar contrato: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JDialog dialogo = new JDialog((JFrame) SwingUtilities.getWindowAncestor(vista), "Editar Contrato", true);
+        dialogo.setLayout(new GridLayout(15, 2, 10, 10));
+        dialogo.setSize(500, 600);
+        dialogo.setLocationRelativeTo(vista);
+
+        // Campos comunes
+        JComboBox<String> cbTipoContrato = new JComboBox<>(new String[]{"Parcial", "Planilla", "Locación"});
+        cbTipoContrato.setSelectedItem(contratoExistente.getTipoContrato());
+        cbTipoContrato.setEnabled(false); // No permitir cambiar tipo
+
+        JComboBox<String> cbEmpleados = new JComboBox<>();
+        JTextField txtSalarioBase = new JTextField(String.valueOf(contratoExistente.getSalarioBase()));
+        JTextField txtBonificacion = new JTextField(String.valueOf(contratoExistente.getBonificacion()));
+        JTextField txtDescuentoAFP = new JTextField(String.valueOf(contratoExistente.getDescuentoAFP()));
+        JSpinner spFechaInicio = new JSpinner(new SpinnerDateModel());
+        JSpinner spFechaFin = new JSpinner(new SpinnerDateModel());
+        JCheckBox chkFechaFinIndefinida = new JCheckBox("Fecha fin indefinida");
+
+        // Campos específicos
+        JTextField txtHorasTrabajadas = new JTextField();
+        JTextField txtPagoPorHora = new JTextField();
+        JTextField txtHorasExtras = new JTextField();
+        JTextField txtNumeroProyectos = new JTextField();
+        JTextField txtMontoPorProyecto = new JTextField();
+
+        // Cargar empleados
+        try {
+            List<Empleado> empleados = controlador.obtenerTodosEmpleados();
+            for (Empleado emp : empleados) {
+                cbEmpleados.addItem(emp.getIdEmpleado() + " - " + emp.getNombre() + " " + emp.getApellidos());
+                if (contratoExistente.getEmpleado() != null && emp.getIdEmpleado() == contratoExistente.getEmpleado().getIdEmpleado()) {
+                    cbEmpleados.setSelectedItem(emp.getIdEmpleado() + " - " + emp.getNombre() + " " + emp.getApellidos());
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(dialogo, "Error al cargar empleados: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Configurar spinners de fecha
+        JSpinner.DateEditor editorInicio = new JSpinner.DateEditor(spFechaInicio, "yyyy-MM-dd");
+        spFechaInicio.setEditor(editorInicio);
+        spFechaInicio.setValue(contratoExistente.getFechaInicio());
+
+        JSpinner.DateEditor editorFin = new JSpinner.DateEditor(spFechaFin, "yyyy-MM-dd");
+        spFechaFin.setEditor(editorFin);
+        if (contratoExistente.getFechaFin() != null) {
+            spFechaFin.setValue(contratoExistente.getFechaFin());
+        } else {
+            chkFechaFinIndefinida.setSelected(true);
+            spFechaFin.setEnabled(false);
+        }
+
+        // Cargar campos específicos según tipo
+        String tipo = contratoExistente.getTipoContrato();
+        if ("Parcial".equals(tipo)) {
+            Modelo.Factory.ContratoParcial cp = (Modelo.Factory.ContratoParcial) contratoExistente;
+            txtHorasTrabajadas.setText(String.valueOf(cp.getHorasTrabajadas()));
+            txtPagoPorHora.setText(String.valueOf(cp.getPagoPorHora()));
+        } else if ("Planilla".equals(tipo)) {
+            Modelo.Factory.ContratoPlanilla cp = (Modelo.Factory.ContratoPlanilla) contratoExistente;
+            txtHorasExtras.setText(String.valueOf(cp.getHorasExtras()));
+        } else if ("Locación".equals(tipo)) {
+            Modelo.Factory.ContratoLocacion cl = (Modelo.Factory.ContratoLocacion) contratoExistente;
+            txtNumeroProyectos.setText(String.valueOf(cl.getNumeroProyectos()));
+            txtMontoPorProyecto.setText(String.valueOf(cl.getMontoPorProyecto()));
+        }
+
+        // Listener para checkbox indefinida
+        chkFechaFinIndefinida.addActionListener(e -> spFechaFin.setEnabled(!chkFechaFinIndefinida.isSelected()));
+
+        // Agregar componentes
+        dialogo.add(new JLabel("Tipo de Contrato:"));
+        dialogo.add(cbTipoContrato);
+        dialogo.add(new JLabel("Empleado:*"));
+        dialogo.add(cbEmpleados);
+        dialogo.add(new JLabel("Salario Base:*"));
+        dialogo.add(txtSalarioBase);
+        dialogo.add(new JLabel("Bonificación:"));
+        dialogo.add(txtBonificacion);
+        dialogo.add(new JLabel("Descuento AFP:"));
+        dialogo.add(txtDescuentoAFP);
+        dialogo.add(new JLabel("Fecha Inicio:*"));
+        dialogo.add(spFechaInicio);
+        dialogo.add(new JLabel("Fecha Fin:"));
+        dialogo.add(spFechaFin);
+        dialogo.add(new JLabel(""));
+        dialogo.add(chkFechaFinIndefinida);
+
+        // Campos específicos
+        dialogo.add(new JLabel("Horas Trabajadas (Parcial):"));
+        dialogo.add(txtHorasTrabajadas);
+        dialogo.add(new JLabel("Pago por Hora (Parcial):"));
+        dialogo.add(txtPagoPorHora);
+        dialogo.add(new JLabel("Horas Extras (Planilla):"));
+        dialogo.add(txtHorasExtras);
+        dialogo.add(new JLabel("Número de Proyectos (Locación):"));
+        dialogo.add(txtNumeroProyectos);
+        dialogo.add(new JLabel("Monto por Proyecto (Locación):"));
+        dialogo.add(txtMontoPorProyecto);
+
+        // Botones
+        JButton btnGuardar = new JButton("Guardar");
+        JButton btnCancelar = new JButton("Cancelar");
+
+        btnGuardar.addActionListener(e -> {
+            try {
+                // Validaciones básicas
+                if (cbEmpleados.getSelectedItem() == null) {
+                    JOptionPane.showMessageDialog(dialogo, "Seleccione un empleado", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (txtSalarioBase.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(dialogo, "Ingrese el salario base", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Actualizar contrato existente
+                contratoExistente.setSalarioBase(Double.parseDouble(txtSalarioBase.getText().trim()));
+                contratoExistente.setBonificacion(Double.parseDouble(txtBonificacion.getText().trim()));
+                contratoExistente.setDescuentoAFP(Double.parseDouble(txtDescuentoAFP.getText().trim()));
+                contratoExistente.setFechaInicio((java.util.Date) spFechaInicio.getValue());
+                if (!chkFechaFinIndefinida.isSelected()) {
+                    contratoExistente.setFechaFin((java.util.Date) spFechaFin.getValue());
+                } else {
+                    contratoExistente.setFechaFin(null);
+                }
+
+                // Asignar empleado
+                int idEmpleado = Integer.parseInt(((String) cbEmpleados.getSelectedItem()).split(" - ")[0]);
+                contratoExistente.setEmpleado(controlador.buscarEmpleadoPorId(idEmpleado));
+
+                // Campos específicos según tipo
+                if ("Parcial".equals(tipo)) {
+                    Modelo.Factory.ContratoParcial cp = (Modelo.Factory.ContratoParcial) contratoExistente;
+                    cp.setHorasTrabajadas(Integer.parseInt(txtHorasTrabajadas.getText().trim()));
+                    cp.setPagoPorHora(Double.parseDouble(txtPagoPorHora.getText().trim()));
+                } else if ("Planilla".equals(tipo)) {
+                    Modelo.Factory.ContratoPlanilla cp = (Modelo.Factory.ContratoPlanilla) contratoExistente;
+                    cp.setHorasExtras(Double.parseDouble(txtHorasExtras.getText().trim()));
+                } else if ("Locación".equals(tipo)) {
+                    Modelo.Factory.ContratoLocacion cl = (Modelo.Factory.ContratoLocacion) contratoExistente;
+                    cl.setNumeroProyectos(Integer.parseInt(txtNumeroProyectos.getText().trim()));
+                    cl.setMontoPorProyecto(Double.parseDouble(txtMontoPorProyecto.getText().trim()));
+                }
+
+                controlador.actualizarContrato(contratoExistente);
+                JOptionPane.showMessageDialog(dialogo, "Contrato actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                dialogo.dispose();
+                vista.mostrarPanel("Gestionar Contratos");
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialogo, "Error al actualizar contrato: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        panelBotones.add(btnGuardar);
+        panelBotones.add(btnCancelar);
+
+        dialogo.add(new JLabel()); // Espacio vacío
+        dialogo.add(panelBotones);
+
+        dialogo.setVisible(true);
     }
 
     private void eliminarContrato(TotalTalentControlador controlador, DashboardVista vista) {
-        JOptionPane.showMessageDialog(vista, "Funcionalidad de eliminar contrato en desarrollo", "Información", JOptionPane.INFORMATION_MESSAGE);
+        JTable tabla = vista.getTablaSeleccionada();
+        if (tabla == null || tabla.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(vista, "Seleccione un contrato para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int idContrato = (Integer) tabla.getValueAt(tabla.getSelectedRow(), 0);
+        int confirmacion = JOptionPane.showConfirmDialog(vista,
+                "¿Está seguro de que desea eliminar este contrato? Esta acción no se puede deshacer.",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                controlador.eliminarContrato(idContrato);
+                JOptionPane.showMessageDialog(vista, "Contrato eliminado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                vista.mostrarPanel("Gestionar Contratos");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(vista, "Error al eliminar contrato: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private void mostrarDialogoBuscarContrato(TotalTalentControlador controlador, DashboardVista vista) {
-        JOptionPane.showMessageDialog(vista, "Funcionalidad de buscar contrato en desarrollo", "Información", JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialogo = new JDialog((JFrame) SwingUtilities.getWindowAncestor(vista), "Buscar Contrato", true);
+        dialogo.setLayout(new GridLayout(4, 2, 10, 10));
+        dialogo.setSize(400, 200);
+        dialogo.setLocationRelativeTo(vista);
+
+        JComboBox<String> cbCriterio = new JComboBox<>(new String[]{"ID", "Nombre Empleado", "Tipo Contrato"});
+        JTextField txtValor = new JTextField();
+
+        dialogo.add(new JLabel("Buscar contrato por:"));
+        dialogo.add(cbCriterio);
+        dialogo.add(new JLabel("Ingresa el dato acá:"));
+        dialogo.add(txtValor);
+
+        JButton btnBuscar = new JButton("Buscar");
+        JButton btnCancelar = new JButton("Cancelar");
+
+        btnBuscar.addActionListener(e -> {
+            String criterio = (String) cbCriterio.getSelectedItem();
+            String valor = txtValor.getText().trim();
+
+            if (valor.isEmpty()) {
+                JOptionPane.showMessageDialog(dialogo, "Ingrese un valor para buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                List<Modelo.Contrato> contratos = controlador.obtenerTodosContratos();
+                List<Modelo.Contrato> resultados = new java.util.ArrayList<>();
+
+                for (Modelo.Contrato cont : contratos) {
+                    boolean coincide = false;
+
+                    switch (criterio) {
+                        case "ID":
+                            try {
+                                int idBuscado = Integer.parseInt(valor);
+                                if (cont.getIdContrato() == idBuscado) {
+                                    coincide = true;
+                                }
+                            } catch (NumberFormatException ex) {
+                                // ID no válido
+                            }
+                            break;
+                        case "Nombre Empleado":
+                            if (cont.getEmpleado() != null
+                                    && (cont.getEmpleado().getNombre().toLowerCase().contains(valor.toLowerCase())
+                                    || cont.getEmpleado().getApellidos().toLowerCase().contains(valor.toLowerCase()))) {
+                                coincide = true;
+                            }
+                            break;
+                        case "Tipo Contrato":
+                            if (cont.getTipoContrato().toLowerCase().contains(valor.toLowerCase())) {
+                                coincide = true;
+                            }
+                            break;
+                    }
+
+                    if (coincide) {
+                        resultados.add(cont);
+                    }
+                }
+
+                if (resultados.isEmpty()) {
+                    JOptionPane.showMessageDialog(dialogo, "No se encontraron contratos con los criterios especificados", "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    // Mostrar resultados en un nuevo diálogo
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Contratos encontrados:\n\n");
+                    for (Modelo.Contrato cont : resultados) {
+                        sb.append("ID: ").append(cont.getIdContrato()).append("\n");
+                        sb.append("Tipo: ").append(cont.getTipoContrato()).append("\n");
+                        sb.append("Empleado: ").append(cont.getEmpleado() != null ? cont.getEmpleado().getNombre() + " " + cont.getEmpleado().getApellidos() : "Sin asignar").append("\n");
+                        sb.append("Salario Base: ").append(cont.getSalarioBase()).append("\n");
+                        sb.append("Fecha Inicio: ").append(cont.getFechaInicio()).append("\n");
+                        sb.append("Fecha Fin: ").append(cont.getFechaFin() != null ? cont.getFechaFin() : "Indefinido").append("\n\n");
+                    }
+
+                    JTextArea txtResultados = new JTextArea(sb.toString());
+                    txtResultados.setEditable(false);
+                    JScrollPane scrollPane = new JScrollPane(txtResultados);
+
+                    JDialog dialogoResultados = new JDialog((JFrame) SwingUtilities.getWindowAncestor(dialogo), "Resultados de búsqueda", true);
+                    dialogoResultados.setLayout(new BorderLayout());
+                    dialogoResultados.add(scrollPane, BorderLayout.CENTER);
+                    JButton btnCerrar = new JButton("Cerrar");
+                    btnCerrar.addActionListener(event -> dialogoResultados.dispose());
+                    dialogoResultados.add(btnCerrar, BorderLayout.SOUTH);
+                    dialogoResultados.setSize(400, 300);
+                    dialogoResultados.setLocationRelativeTo(dialogo);
+                    dialogoResultados.setVisible(true);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialogo, "Error al buscar contratos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        btnCancelar.addActionListener(e -> dialogo.dispose());
+
+        JPanel panelBotones = new JPanel(new FlowLayout());
+        panelBotones.add(btnBuscar);
+        panelBotones.add(btnCancelar);
+
+        dialogo.add(new JLabel()); // Espacio vacío
+        dialogo.add(panelBotones);
+
+        dialogo.setVisible(true);
     }
 
     private void mostrarPanelLogs(JPanel panelContenido, DashboardVista vista, TotalTalentControlador controlador) {

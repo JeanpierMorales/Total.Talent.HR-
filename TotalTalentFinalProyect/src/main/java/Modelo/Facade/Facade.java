@@ -85,7 +85,7 @@ public class Facade {
             case "admin":
                 return rol == Rol.ADMINISTRADOR;
             case "reclutador":
-                return rol == Rol.RECLUTADOR || rol == Rol.ADMINISTRADOR;
+                return rol == Rol.RECLUTADOR || rol == Rol.GERENTE || rol == Rol.ADMINISTRADOR;
             case "gerente":
                 return rol == Rol.GERENTE || rol == Rol.ADMINISTRADOR;
             case "empleado":
@@ -122,7 +122,16 @@ public class Facade {
 
     // Método para actualizar un empleado
     public void actualizarEmpleado(Empleado empleado) {
-        verificarPermiso("reclutador");
+        // Permitir que empleados actualicen sus propios datos, o reclutadores/administradores actualicen cualquier empleado
+        if (usuarioActual.getRol() == Rol.EMPLEADO) {
+            // Si es empleado, verificar que solo actualice sus propios datos
+            if (usuarioActual.getEmpleado() == null || usuarioActual.getEmpleado().getIdEmpleado() != empleado.getIdEmpleado()) {
+                throw new RuntimeException("Los empleados solo pueden actualizar sus propios datos");
+            }
+        } else {
+            // Para otros roles, verificar permisos de reclutador
+            verificarPermiso("reclutador");
+        }
         empleadoRepo.actualizar(empleado);
         logRepo.registrarActualizacion(usuarioActual.getNombreUsuario(), "empleado", empleado.getIdEmpleado());
     }
@@ -200,7 +209,7 @@ public class Facade {
 
     // Método para obtener todos los contratos
     public List<Contrato> obtenerTodosContratos() {
-        verificarPermiso("gerente");
+        verificarPermiso("reclutador");
         return contratoRepo.obtenerTodos();
     }
 

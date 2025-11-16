@@ -42,24 +42,27 @@ public class LoginVista extends JFrame {
         setLayout(new BorderLayout());
         getContentPane().setBackground(COLOR_FONDO);
 
-        // Panel principal
+        // Panel principal con padding y GridBag para buena alineación
         JPanel panelPrincipal = new JPanel(new GridBagLayout());
         panelPrincipal.setBackground(COLOR_FONDO);
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Título
-        JLabel lblTitulo = new JLabel("SISTEMA DE GESTIÓN DE TALENTO");
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        lblTitulo.setForeground(COLOR_TEXTO);
+        // Logo / Título centralizadas
+        JLabel lblLogo = new JLabel("TOTAL TALENT HR", SwingConstants.CENTER);
+        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        lblLogo.setForeground(COLOR_TEXTO);
+        lblLogo.setBorder(BorderFactory.createEmptyBorder(6, 6, 12, 6));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        panelPrincipal.add(lblTitulo, gbc);
+        panelPrincipal.add(lblLogo, gbc);
 
-        // Subtítulo
-        JLabel lblSubtitulo = new JLabel("TOTAL TALENT HR");
-        lblSubtitulo.setFont(new Font("Arial", Font.BOLD, 16));
+        // Línea descriptiva
+        JLabel lblSubtitulo = new JLabel("Sistema de gestión de talento humano", SwingConstants.CENTER);
+        lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         lblSubtitulo.setForeground(COLOR_TEXTO);
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -69,6 +72,7 @@ public class LoginVista extends JFrame {
         // Usuario
         JLabel lblUsuario = new JLabel("Usuario:");
         lblUsuario.setForeground(COLOR_TEXTO);
+        lblUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
@@ -76,6 +80,8 @@ public class LoginVista extends JFrame {
 
         txtUsuario = new JTextField(20);
         txtUsuario.setBackground(Color.WHITE);
+        txtUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        txtUsuario.setPreferredSize(new Dimension(220, 28));
         gbc.gridx = 1;
         gbc.gridy = 2;
         panelPrincipal.add(txtUsuario, gbc);
@@ -83,19 +89,23 @@ public class LoginVista extends JFrame {
         // Contraseña
         JLabel lblContrasena = new JLabel("Contraseña:");
         lblContrasena.setForeground(COLOR_TEXTO);
+        lblContrasena.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         gbc.gridx = 0;
         gbc.gridy = 3;
         panelPrincipal.add(lblContrasena, gbc);
 
-        JPanel panelContrasena = new JPanel(new BorderLayout());
+        JPanel panelContrasena = new JPanel(new BorderLayout(6, 0));
         panelContrasena.setBackground(COLOR_FONDO);
         txtContrasena = new JPasswordField(20);
         txtContrasena.setBackground(Color.WHITE);
+        txtContrasena.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        txtContrasena.setPreferredSize(new Dimension(220, 28));
         panelContrasena.add(txtContrasena, BorderLayout.CENTER);
 
         btnMostrarContrasena = new JButton("👁");
         btnMostrarContrasena.setBackground(COLOR_BOTON);
         btnMostrarContrasena.setFocusPainted(false);
+        btnMostrarContrasena.setPreferredSize(new Dimension(44, 28));
         btnMostrarContrasena.addActionListener(new ActionListener() {
             private boolean mostrando = false;
 
@@ -117,6 +127,7 @@ public class LoginVista extends JFrame {
         btnLogin.setBackground(COLOR_BOTON);
         btnLogin.setForeground(COLOR_TEXTO);
         btnLogin.setFocusPainted(false);
+        btnLogin.setPreferredSize(new Dimension(240, 36));
         btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnLogin.setBackground(COLOR_BOTON_HOVER);
@@ -135,12 +146,14 @@ public class LoginVista extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
         panelPrincipal.add(btnLogin, gbc);
 
-        // Mensaje
+        // Mensaje de error/info
         lblMensaje = new JLabel("");
         lblMensaje.setForeground(Color.RED);
         lblMensaje.setHorizontalAlignment(SwingConstants.CENTER);
+        lblMensaje.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
@@ -148,10 +161,11 @@ public class LoginVista extends JFrame {
 
         add(panelPrincipal, BorderLayout.CENTER);
 
-        // Configurar autoajuste
+        // Configurar autoajuste y accesibilidad
         pack();
-        setMinimumSize(new Dimension(400, 300));
+        setMinimumSize(new Dimension(420, 340));
         setLocationRelativeTo(null);
+        getRootPane().setDefaultButton(btnLogin);
     }
 
     private void configurarVentana() {

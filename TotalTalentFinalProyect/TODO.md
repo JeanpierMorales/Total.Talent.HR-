@@ -1,0 +1,7 @@
+- [x] Modificar mostrarPanelDatosPersonales en EmpleadoStrategy.java para usar layout flexible (BoxLayout y FlowLayout)
+- [x] Hacer todos JTextFields no editables
+- [x] Agregar todos los campos de Empleado: nombre, apellidos, edad, dni, numero, correo, direccion, gradoInstruccion, carrera, comentarios
+- [x] Agregar todos los campos de Contrato: tipoContrato, salarioBase, fechaInicio, fechaFin, bonificacion, descuentoAFP
+- [x] Mantener Usuario: nombreUsuario, contrasena con botón ver
+- [x] Mantener títulos centrados
+- [x] Manejar posibles nulls en datos
