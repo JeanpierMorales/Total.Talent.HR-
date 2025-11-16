@@ -274,14 +274,18 @@ public class AdminStrategy implements DashboardStrategy {
 
         JTextField txtNombreUsuario = new JTextField(20);
         JPasswordField txtContrasena = new JPasswordField(20);
-        JComboBox<String> cbRol = new JComboBox<>(new String[]{"ADMINISTRADOR", "RECLUTADOR", "GERENTE", "EMPLEADO"});
 
-        // Seleccionar empleado existente
+        // Seleccionar empleado que no tenga usuario asignado
         JComboBox<String> cbEmpleados = new JComboBox<>();
         try {
             List<Empleado> empleados = controlador.obtenerTodosEmpleados();
+            List<Usuario> usuarios = controlador.obtenerTodosUsuarios();
+            // Filtrar empleados que no tienen usuario asignado
             for (Empleado emp : empleados) {
-                cbEmpleados.addItem(emp.getIdEmpleado() + " - " + emp.getNombre() + " " + emp.getApellidos());
+                boolean tieneUsuario = usuarios.stream().anyMatch(u -> u.getEmpleado() != null && u.getEmpleado().getIdEmpleado() == emp.getIdEmpleado());
+                if (!tieneUsuario) {
+                    cbEmpleados.addItem(emp.getIdEmpleado() + " - " + emp.getNombre() + " " + emp.getApellidos());
+                }
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(dialogo, "Error al cargar empleados: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -297,10 +301,6 @@ public class AdminStrategy implements DashboardStrategy {
         panelContrasena.add(new JLabel("Contraseña para el Nuevo usuario:"));
         panelContrasena.add(txtContrasena);
 
-        JPanel panelRol = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelRol.add(new JLabel("Rol para el Nuevo usuario:"));
-        panelRol.add(cbRol);
-
         JPanel panelEmpleado = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelEmpleado.add(new JLabel("Empleado para el Nuevo usuario:"));
         panelEmpleado.add(cbEmpleados);
@@ -314,11 +314,9 @@ public class AdminStrategy implements DashboardStrategy {
         btnGuardar.addActionListener(e -> {
             String nombreUsuario = txtNombreUsuario.getText().trim();
             String contrasena = new String(txtContrasena.getPassword());
-            String rol = (String) cbRol.getSelectedItem();
             String empleadoSeleccionado = (String) cbEmpleados.getSelectedItem();
 
-            if (!Validaciones.validarNoVacio(nombreUsuario) || !Validaciones.validarNoVacio(contrasena)
-                    || !Validaciones.validarNoVacio(rol) || empleadoSeleccionado == null) {
+            if (!Validaciones.validarNoVacio(nombreUsuario) || !Validaciones.validarNoVacio(contrasena) || empleadoSeleccionado == null) {
                 JOptionPane.showMessageDialog(dialogo, "Todos los campos marcados con * son obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -328,13 +326,14 @@ public class AdminStrategy implements DashboardStrategy {
                 int idEmpleado = Integer.parseInt(empleadoSeleccionado.split(" - ")[0]);
                 Empleado empleado = controlador.buscarEmpleadoPorId(idEmpleado);
 
-                controlador.agregarUsuario(nombreUsuario, contrasena, rol);
-                // Vincular usuario al empleado existente
-                Usuario usuario = controlador.buscarUsuarioPorNombre(nombreUsuario);
-                if (usuario != null && empleado != null) {
-                    usuario.setEmpleado(empleado);
-                    controlador.actualizarUsuario(usuario);
-                }
+                // Crear usuario con el rol del empleado
+                Usuario nuevoUsuario = new Usuario();
+                nuevoUsuario.setNombreUsuario(nombreUsuario);
+                nuevoUsuario.setContrasena(contrasena);
+                nuevoUsuario.setEmpleado(empleado);
+
+                controlador.guardarUsuario(nuevoUsuario);
+
                 JOptionPane.showMessageDialog(dialogo, "Usuario agregado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 dialogo.dispose();
                 // Refrescar panel
@@ -348,7 +347,6 @@ public class AdminStrategy implements DashboardStrategy {
 
         dialogo.add(panelNombre);
         dialogo.add(panelContrasena);
-        dialogo.add(panelRol);
         dialogo.add(panelEmpleado);
         dialogo.add(panelBotones);
 
