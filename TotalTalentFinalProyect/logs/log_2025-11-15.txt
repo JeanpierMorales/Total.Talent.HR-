@@ -1,0 +1,99 @@
+[2025-11-15 19:45:09] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 20:00:09] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 20:00:39] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 20:00:52] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 20:01:23] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 20:04:42] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 20:04:54] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 20:16:11] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 20:16:57] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 20:28:49] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 20:37:28] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 20:53:26] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 20:58:29] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 20:58:31] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-15 21:01:03] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 21:06:36] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 21:08:25] CREACION - USUARIO: omarsm | TABLA: empleado | ID: 10
+[2025-11-15 21:09:27] ACTUALIZACION - USUARIO: omarsm | TABLA: empleado | ID: 10
+[2025-11-15 21:15:23] CREACION - USUARIO: omarsm | TABLA: contrato | ID: 5
+[2025-11-15 21:16:19] ACTUALIZACION - USUARIO: omarsm | TABLA: contrato | ID: 5
+[2025-11-15 21:16:59] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 21:22:54] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-15 21:24:43] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 21:28:46] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 21:29:35] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 21:29:36] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-15 21:44:41] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 21:49:02] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 21:53:18] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:00:17] LOGIN FALLIDO - USUARIO: omarsm | RAZON: Credenciales inválidas
+[2025-11-15 22:00:20] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 22:01:58] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:02:00] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-15 22:02:03] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:05:54] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-15 22:06:30] LOGIN FALLIDO - USUARIO: jorgevasquez | RAZON: Credenciales inválidas
+[2025-11-15 22:06:33] LOGIN FALLIDO - USUARIO: jorgevasquez | RAZON: Credenciales inválidas
+[2025-11-15 22:06:40] LOGIN FALLIDO - USUARIO: jorgevasquez | RAZON: Credenciales inválidas
+[2025-11-15 22:07:54] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-15 22:12:42] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:13:04] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-15 22:13:07] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:14:02] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-15 22:14:12] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:14:18] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:14:18] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-15 22:14:19] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:14:19] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-15 22:14:24] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:21:53] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:27:51] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:28:06] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-15 22:28:08] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:29:13] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:31:03] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-15 22:31:05] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:31:11] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-15 22:35:20] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:35:44] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-15 22:38:59] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:41:30] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-15 22:41:34] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:46:11] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-15 22:54:35] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 22:56:45] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 22:56:58] ACTUALIZACION - USUARIO: rosatorres | TABLA: empleado | ID: 9
+[2025-11-15 23:01:20] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:01:38] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 23:02:06] ACTUALIZACION - USUARIO: rosatorres | TABLA: empleado | ID: 9
+[2025-11-15 23:08:05] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:08:27] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 23:08:45] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:15:38] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 23:22:16] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:24:33] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 23:26:37] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:27:11] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 23:27:11] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 23:27:11] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-15 23:30:16] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:31:10] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-15 23:36:41] USUARIO: luissanchez | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:37:15] LOGIN FALLIDO - USUARIO: rosasanchez | RAZON: Credenciales inválidas
+[2025-11-15 23:37:26] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-15 23:46:10] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-15 23:47:17] USUARIO: luissanchez | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:47:21] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 23:47:56] ACTUALIZACION - USUARIO: omarsm | TABLA: empleado | ID: 9
+[2025-11-15 23:48:11] ACTUALIZACION - USUARIO: omarsm | TABLA: empleado | ID: 3
+[2025-11-15 23:48:25] ACTUALIZACION - USUARIO: omarsm | TABLA: empleado | ID: 8
+[2025-11-15 23:48:27] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:48:34] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-15 23:48:48] USUARIO: luissanchez | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:48:52] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-15 23:49:36] CREACION - USUARIO: omarsm | TABLA: contrato | ID: 6
+[2025-11-15 23:49:41] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:49:46] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-15 23:49:54] USUARIO: luissanchez | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-15 23:51:32] LOGIN EXITOSO - USUARIO: carlosgutierrez

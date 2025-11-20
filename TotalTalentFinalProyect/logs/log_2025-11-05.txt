@@ -1,0 +1,2 @@
+[2025-11-05 01:07:14] CREACION - USUARIO: admin | TABLA: empleado | ID: 13
+[2025-11-05 01:07:14] CREACION - USUARIO: admin | TABLA: contrato | ID: 6

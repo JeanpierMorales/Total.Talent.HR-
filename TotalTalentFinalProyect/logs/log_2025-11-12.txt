@@ -1,0 +1,19 @@
+[2025-11-12 02:43:18] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-12 02:45:33] CREACION - USUARIO: omarsm | TABLA: empleado | ID: 9
+[2025-11-12 12:11:12] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-12 12:15:37] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-12 12:18:21] USUARIO: luissanchez | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-12 12:18:41] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-12 12:18:46] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-12 12:20:23] USUARIO: jorgevargas | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-12 12:28:32] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-12 12:28:57] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-12 12:29:04] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-12 12:29:29] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-12 12:30:14] USUARIO: luissanchez | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-12 12:37:36] LOGIN FALLIDO - USUARIO: jorgevasquez | RAZON: Credenciales inválidas
+[2025-11-12 12:37:44] LOGIN FALLIDO - USUARIO: jorgevasquez | RAZON: Credenciales inválidas
+[2025-11-12 12:38:14] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-12 12:44:31] USUARIO: luissanchez | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-12 12:44:44] LOGIN EXITOSO - USUARIO: luissanchez
+[2025-11-12 12:47:43] USUARIO: luissanchez | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
