@@ -1,0 +1,31 @@
+[2025-11-20 08:34:54] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-20 08:35:04] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-20 08:35:08] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-20 08:37:02] CREACION - USUARIO: omarsm | TABLA: empleado | ID: 11
+[2025-11-20 08:40:24] CREACION - USUARIO: omarsm | TABLA: contrato | ID: 7
+[2025-11-20 08:41:12] CREACION - USUARIO: omarsm | TABLA: usuario | ID: 15
+[2025-11-20 08:41:19] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 08:41:36] LOGIN FALLIDO - USUARIO: nicolascosar | RAZON: Credenciales inválidas
+[2025-11-20 08:41:44] LOGIN FALLIDO - USUARIO: nicolascosar | RAZON: Credenciales inválidas
+[2025-11-20 08:42:05] LOGIN EXITOSO - USUARIO: nicolarcosar
+[2025-11-20 08:42:30] USUARIO: nicolarcosar | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 08:42:48] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-20 08:43:38] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 08:43:47] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-20 08:44:10] ACTUALIZACION - USUARIO: omarsm | TABLA: empleado | ID: 11
+[2025-11-20 08:45:49] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 08:45:55] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-20 08:46:07] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 08:46:52] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-20 10:46:45] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-20 10:48:38] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 10:48:48] LOGIN FALLIDO - USUARIO: rosatorres | RAZON: Credenciales inválidas
+[2025-11-20 10:48:51] LOGIN FALLIDO - USUARIO: rosatorres | RAZON: Credenciales inválidas
+[2025-11-20 10:49:23] LOGIN FALLIDO - USUARIO: rosasanchez | RAZON: Credenciales inválidas
+[2025-11-20 10:50:13] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-20 10:52:31] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 10:52:36] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-20 10:52:45] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 10:52:51] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-20 10:53:56] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-20 10:54:22] LOGIN EXITOSO - USUARIO: luissanchez

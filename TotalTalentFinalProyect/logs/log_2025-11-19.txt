@@ -1,0 +1,10 @@
+[2025-11-19 00:13:24] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-19 00:14:55] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-19 00:15:02] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-19 00:15:03] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-19 00:15:04] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-19 00:15:11] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-19 00:15:21] LOGIN EXITOSO - USUARIO: jorgevargas
+[2025-11-19 00:15:57] USUARIO: jorgevargas | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión
+[2025-11-19 00:16:06] LOGIN EXITOSO - USUARIO: rosatorres
+[2025-11-19 00:16:23] USUARIO: rosatorres | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión

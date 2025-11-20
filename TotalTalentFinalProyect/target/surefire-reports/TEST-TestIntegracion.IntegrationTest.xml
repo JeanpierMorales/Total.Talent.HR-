@@ -15,7 +15,7 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-23\bin"/>
-    <property name="sun.java.command" value="C:\Users\Omar Morales Silva\AppData\Local\Temp\surefire15450111795680179418\surefirebooter-20251116113821987_3.jar C:\Users\Omar Morales Silva\AppData\Local\Temp\surefire15450111795680179418 2025-11-16T11-38-21_874-jvmRun1 surefire-20251116113821987_1tmp surefire_0-20251116113821987_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\Omar Morales Silva\AppData\Local\Temp\surefire9644663659302918938\surefirebooter-20251119114013220_3.jar C:\Users\Omar Morales Silva\AppData\Local\Temp\surefire9644663659302918938 2025-11-19T11-40-13_093-jvmRun1 surefire-20251119114013220_1tmp surefire_0-20251119114013220_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="test" value="TestIntegracion.IntegrationTest"/>
     <property name="surefire.test.class.path" value="C:\Users\Omar Morales Silva\Desktop\2025 - 2\1. POO II\Trabajo Final\Total.Talent.HR-\TotalTalentFinalProyect\target\test-classes;C:\Users\Omar Morales Silva\Desktop\2025 - 2\1. POO II\Trabajo Final\Total.Talent.HR-\TotalTalentFinalProyect\target\classes;C:\Users\Omar Morales Silva\.m2\repository\com\mysql\mysql-connector-j\9.1.0\mysql-connector-j-9.1.0.jar;C:\Users\Omar Morales Silva\.m2\repository\com\google\protobuf\protobuf-java\4.26.1\protobuf-java-4.26.1.jar;C:\Users\Omar Morales Silva\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.3\junit-jupiter-5.10.3.jar;C:\Users\Omar Morales Silva\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.3\junit-jupiter-api-5.10.3.jar;C:\Users\Omar Morales Silva\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\Omar Morales Silva\.m2\repository\org\junit\platform\junit-platform-commons\1.10.3\junit-platform-commons-1.10.3.jar;C:\Users\Omar Morales Silva\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\Omar Morales Silva\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.3\junit-jupiter-params-5.10.3.jar;C:\Users\Omar Morales Silva\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.3\junit-jupiter-engine-5.10.3.jar;C:\Users\Omar Morales Silva\.m2\repository\org\junit\platform\junit-platform-engine\1.10.3\junit-platform-engine-1.10.3.jar;C:\Users\Omar Morales Silva\.m2\repository\org\jfree\jfreechart\1.5.3\jfreechart-1.5.3.jar;"/>
@@ -31,7 +31,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\Omar Morales Silva\AppData\Local\Temp\surefire15450111795680179418\surefirebooter-20251116113821987_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Omar Morales Silva\AppData\Local\Temp\surefire9644663659302918938\surefirebooter-20251119114013220_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="23.0.2+7-58"/>
@@ -60,7 +60,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="testCrearContratoPlanilla" classname="TestIntegracion.IntegrationTest" time="0.032"/>
+  <testcase name="testCrearContratoPlanilla" classname="TestIntegracion.IntegrationTest" time="0.031"/>
   <testcase name="testCrearContratoLocacion" classname="TestIntegracion.IntegrationTest" time="0.001"/>
   <testcase name="testCrearContratoParcial" classname="TestIntegracion.IntegrationTest" time="0.001"/>
 </testsuite>
