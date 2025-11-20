@@ -1,0 +1,8 @@
+[2025-11-17 12:29:28] LOGIN FALLIDO - USUARIO: fabz | RAZON: Credenciales inválidas
+[2025-11-17 12:29:51] LOGIN EXITOSO - USUARIO: omarsm
+[2025-11-17 12:30:26] CREACION - USUARIO: omarsm | TABLA: usuario | ID: 16
+[2025-11-17 12:30:35] ELIMINACION - USUARIO: omarsm | TABLA: usuario | ID: 16
+[2025-11-17 12:32:12] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de empleados
+[2025-11-17 12:32:19] USUARIO: omarsm | ACCION: REPORTE | DESCRIPCION: Generación de reporte de contratos
+[2025-11-17 12:32:55] ACTUALIZACION - USUARIO: omarsm | TABLA: empleado | ID: 10
+[2025-11-17 12:33:29] USUARIO: omarsm | ACCION: LOGOUT | DESCRIPCION: Cierre de sesión

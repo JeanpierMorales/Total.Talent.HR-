@@ -3,31 +3,34 @@ package Modelo.Repository;
 import Modelo.Usuario;
 import java.util.List;
 
-// Interfaz para el repositorio de usuarios que nos define las operaciones CRUD para la entidad Usuario
-
+// --- Interfaz UsuarioRepository ---
+// Esta interfaz define el contrato (las operaciones CRUD) para la entidad Usuario.
+// El Facade depende de esta interfaz para gestionar usuarios,
+// sin saber si los datos vienen de MySQL, archivos, etc.
 public interface UsuarioRepository {
 
-    // Método para guardar un nuevo usuario en la base de datos
+    // Define un método para guardar un nuevo usuario en la base de datos.
     void guardar(Usuario usuario);
 
-    // Método para actualizar un usuario existente
+    // Define un método para actualizar un usuario existente.
     void actualizar(Usuario usuario);
 
-    // Método para eliminar un usuario por su ID
+    // Define un método para eliminar un usuario por su ID.
     void eliminar(int idUsuario);
 
-    // Método para buscar un usuario por su ID
+    // Define un método para buscar un usuario por su ID.
     Usuario buscarPorId(int idUsuario);
 
-    // Método para buscar un usuario por su nombre de usuario
+    // Define un método para buscar un usuario por su nombre de usuario (para login).
     Usuario buscarPorNombreUsuario(String nombreUsuario);
 
-    // Método para obtener todos los usuarios
+    // Define un método para obtener todos los usuarios.
     List<Usuario> obtenerTodos();
 
-    // Método para verificar si un nombre de usuario ya existe
+    // Define un método para verificar si un nombre de usuario ya existe (para validación).
     boolean existeNombreUsuario(String nombreUsuario);
 
-    // Método para verificar credenciales de login
+    // Define un método para verificar las credenciales de login.
+    // Es el método clave que usará el Facade en su función de login.
     Usuario verificarCredenciales(String nombreUsuario, String contrasena);
 }

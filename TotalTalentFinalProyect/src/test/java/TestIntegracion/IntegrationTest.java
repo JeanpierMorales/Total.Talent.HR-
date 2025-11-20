@@ -33,8 +33,8 @@ public class IntegrationTest {
         // Configurar atributos específicos
         ContratoParcial parcial = (ContratoParcial) contrato;
         parcial.setHorasTrabajadas(160);
-        parcial.setPagoPorHora(10.0);
-        parcial.setBonificacion(50.0);
+        parcial.setPagoPorHora((float) 10.0);
+        parcial.setBonificacion((float)50.0);
 
         // Calcular sueldo
         double sueldo = contrato.calcularSueldo();
@@ -57,10 +57,10 @@ public class IntegrationTest {
 
         // Configurar atributos
         ContratoPlanilla planilla = (ContratoPlanilla) contrato;
-        planilla.setSalarioBase(1000.0);
-        planilla.setBonificacion(100.0);
-        planilla.setDescuentoAFP(50.0);
-        planilla.setHorasExtras(10.0);
+        planilla.setSalarioBase((float) 1000.0);
+        planilla.setBonificacion((float) 100.0);
+        planilla.setDescuentoAFP((float) 50.0);
+        planilla.setHorasExtras((float) 10.0);
 
         // Calcular sueldo: 1000 + 100 + (10*15) - 50 = 1200
         double sueldo = contrato.calcularSueldo();
@@ -82,8 +82,8 @@ public class IntegrationTest {
         // Configurar atributos específicos
         ContratoLocacion locacion = (ContratoLocacion) contrato;
         locacion.setNumeroProyectos(5);
-        locacion.setMontoPorProyecto(200.0);
-        locacion.setBonificacion(100.0);
+        locacion.setMontoPorProyecto((float) 200.0);
+        locacion.setBonificacion((float) 100.0);
 
         // Calcular sueldo: 5 * 200 + 100 = 1100
         double sueldo = contrato.calcularSueldo();

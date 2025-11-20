@@ -3,34 +3,37 @@ package Modelo.Repository;
 import java.util.Date;
 import java.util.List;
 
-// Interfaz para el repositorio de logs de auditoría
-// Define las operaciones para registrar acciones del sistema
+// --- Interfaz LogRepository ---
+// Esta interfaz define el contrato para cualquier clase que quiera
+// gestionar el almacenamiento y recuperación de logs de auditoría del sistema.
+// El Facade depende de esta interfaz para registrar las acciones de los usuarios.
 public interface LogRepository {
 
-    // Método para registrar una acción en el log
+    // Define un método para registrar una acción genérica.
     void registrarAccion(String usuario, String accion, String descripcion);
 
-    // Método para registrar login exitoso
+    // Define un método para registrar un inicio de sesión exitoso.
     void registrarLoginExitoso(String usuario);
 
-    // Método para registrar login fallido
+    // Define un método para registrar un inicio de sesión fallido.
     void registrarLoginFallido(String usuario, String razon);
 
-    // Método para registrar creación de registro
+    // Define un método para registrar la creación de un nuevo registro (ej. nuevo empleado).
     void registrarCreacion(String usuario, String tabla, int idRegistro);
 
-    // Método para registrar actualización de registro
+    // Define un método para registrar la actualización de un registro.
     void registrarActualizacion(String usuario, String tabla, int idRegistro);
 
-    // Método para registrar eliminación de registro
+    // Define un método para registrar la eliminación de un registro.
     void registrarEliminacion(String usuario, String tabla, int idRegistro);
 
-    // Método para obtener logs por usuario
+    // Define un método para obtener todos los logs de un usuario específico.
+    // Usado por el Facade, que a su vez es llamado por la AdminStrategy.
     List<String> obtenerLogsPorUsuario(String usuario);
 
-    // Método para obtener logs por fecha
+    // Define un método para obtener todos los logs de una fecha específica.
     List<String> obtenerLogsPorFecha(Date fecha);
 
-    // Método para obtener todos los logs
+    // Define un método para obtener absolutamente todos los logs del sistema.
     List<String> obtenerTodosLosLogs();
 }

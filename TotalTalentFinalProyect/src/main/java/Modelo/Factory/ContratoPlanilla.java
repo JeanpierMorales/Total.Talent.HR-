@@ -3,31 +3,42 @@ package Modelo.Factory;
 import Modelo.Contrato;
 
 
-
+// --- Clase ContratoPlanilla (Producto Concreto) ---
+// Esta es una subclase de Contrato (herencia). Representa un tipo específico
+// de contrato, en este caso, un empleado en planilla.
+// Es uno de los "productos" que el ContratoFactory puede crear.
 public class ContratoPlanilla extends Contrato {
 
-    // Atributo de horas extra para el contrato de planilla
-    private double horasExtras;
+    // Atributo específico para el contrato de planilla.
+    private float horasExtras;
 
-    // Constructor de la clase ContratoPlanilla
-    public double getHorasExtras() {
+    // Métodos getter y setter para el atributo específico.
+    public float getHorasExtras() {
         return horasExtras;
     }
     
-    public ContratoPlanilla(){
-        this.setTipoContrato("Planilla");
-    }
-
-    // Métodos getter y setter de la clase
-    public void setHorasExtras(double horasExtras) {
+    public void setHorasExtras(float horasExtras) {
         this.horasExtras = horasExtras;
     }
 
+    // Constructor de la clase ContratoPlanilla.
+    public ContratoPlanilla(){
+        // Llama al método setTipoContrato (heredado de Contrato)
+        // para auto-asignarse su tipo.
+        this.setTipoContrato("Planilla");
+    }
+
+    // --- Implementación del Método Abstracto ---
+    // Sobrescribe el método abstracto calcularSueldo heredado de Contrato.
+    // Cada tipo de contrato (Planilla, Parcial, Locacion) tiene su propia
+    // fórmula para calcular el sueldo.
     @Override
-    public double calcularSueldo() {
-        // Calcula el total de sueldo aplicando las horas extras y también los descuentos pro afp
-        double total = getSalarioBase() + getBonificacion();
-        total += (horasExtras * 15);
+    public float calcularSueldo() {
+        // Obtiene los valores base (heredados) usando getSalarioBase(), getBonificacion(), etc.
+        float total = getSalarioBase() + getBonificacion();
+        // Añade el cálculo específico de este tipo de contrato (pago de horas extras).
+        total += (horasExtras * 15); // Asume un pago fijo de 15 por hora extra.
+        // Aplica el descuento de AFP (solo planilla lo aplica).
         total -= getDescuentoAFP();
         return total;
     }

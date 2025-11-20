@@ -5,67 +5,79 @@ import java.util.Scanner;
 
 import Modelo.Contrato;
 import Modelo.Empleado;
-import Modelo.Facade.Facade;
+import Modelo.Facade.Facade; // Importamos el Facade, que es la puerta de entrada al Modelo.
 import Modelo.Rol;
 import Modelo.Usuario;
 
-// Controlador principal del sistema Total Talent HR
-// Maneja la lógica de negocio y coordina las operaciones entre modelo y vista
+// --- Controlador Principal del Sistema ---
+// Esta clase, TotalTalentControlador, es el cerebro de la aplicación.
+// Conecta la Vista (la interfaz gráfica de usuario) con el Modelo (la lógica de negocio).
+// Recibe las peticiones de la Vista (ej. un clic en "login") y le pide
+// al Facade del Modelo que ejecute la acción correspondiente.
 public class TotalTalentControlador {
 
+    // Instancia del Facade. Usamos este objeto para comunicarnos con el Modelo.
     private Facade facade;
+    // Scanner para la entrada por consola (usado para las pruebas iniciales).
     private Scanner scanner;
+    // Contador para los intentos fallidos de inicio de sesión.
     private int intentosLogin;
 
-    // Constructor que inicializa el facade y el scanner
+    // Constructor que inicializa el Facade y el Scanner.
     public TotalTalentControlador() {
-        this.facade = new Facade();
+        this.facade = new Facade(); // Crea la instancia del Facade.
         this.scanner = new Scanner(System.in);
         this.intentosLogin = 0;
     }
 
-    // Método para manejar el login del usuario con límite de intentos
+    // Método para manejar el login del usuario. Es llamado por la LoginVista.
     public boolean login(String nombreUsuario, String contrasena) {
         if (intentosLogin >= 3) {
-            // Demasiados intentos fallidos: comportamiento silencioso en GUI
+            // Si se superan los 3 intentos, la función retorna falso.
             return false;
         }
 
+        // Delega la validación de credenciales al Facade.
         boolean exito = facade.login(nombreUsuario, contrasena);
         if (exito) {
-            intentosLogin = 0; // Resetear intentos en login exitoso
+            intentosLogin = 0; // Reinicia el contador si el login es exitoso.
         } else {
-            intentosLogin++;
-            // Intento fallido: el feedback se muestra en la vista (GUI), no por consola
+            intentosLogin++; // Aumenta el contador si el login falla.
         }
         return exito;
     }
 
-    // Método para obtener el usuario actualmente logueado
+    // Devuelve el objeto Usuario que está actualmente logueado.
+    // Lo usan las vistas (DashboardVista y las Strategies) para saber quién es.
     public Usuario getUsuarioActual() {
         return facade.getUsuarioActual();
     }
 
-    // Método para verificar si hay usuario logueado
+    // Verifica si hay un usuario en la sesión.
     public boolean hayUsuarioLogueado() {
         return facade.hayUsuarioLogueado();
     }
 
-    // Método para cerrar sesión
+    // Llama al Facade para cerrar la sesión del usuario actual.
+    // Se usa desde el botón "Cerrar Sesión" del DashboardVista.
     public void logout() {
         facade.logout();
     }
 
-    // Método para mostrar el dashboard según el rol del usuario
+    // --- Métodos de Consola (Versión Antigua/Pruebas) ---
+    
+    // Lógica para los menús de la versión de consola.
+    // Determina qué menú de consola mostrar según el rol del usuario.
     public void mostrarDashboardSegunRol() {
         Usuario usuarioActual = facade.getUsuarioActual();
         if (usuarioActual == null) {
-            // No hay usuario logueado: no imprimir en consola (GUI maneja el flujo)
+            // No hay usuario logueado.
             return;
         }
 
-        Rol rol = usuarioActual.getRol();
+        Rol rol = usuarioActual.getRol(); // Obtiene el rol (ADMINISTRADOR, GERENTE, etc.).
 
+        // Selecciona el menú de consola apropiado.
         switch (rol) {
             case ADMINISTRADOR:
                 mostrarMenuAdministrador();
@@ -80,16 +92,15 @@ public class TotalTalentControlador {
                 mostrarMenuEmpleado();
                 break;
             default:
-            // Rol no reconocido: manejar en la UI si corresponde
+            // Rol no reconocido.
         }
     }
 
-    // Método para mostrar menú de administrador
+    // Método para mostrar menú de administrador (consola).
     private void mostrarMenuAdministrador() {
         boolean continuar = true;
         while (continuar) {
-            // Menú de administración (modo consola) - sin salida por consola en modo GUI
-
+            // Menú de administración (modo consola)
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea
 
@@ -121,17 +132,16 @@ public class TotalTalentControlador {
                     // Opción no válida (modo consola)
                 }
             } catch (Exception e) {
-                // Error en la operación: el mensaje se puede propagar a la UI si es necesario
+                // Error en la operación (modo consola)
             }
         }
     }
 
-    // Método para mostrar menú de reclutador
+    // Método para mostrar menú de reclutador (consola).
     private void mostrarMenuReclutador() {
         boolean continuar = true;
         while (continuar) {
-            // Menú de reclutador (modo consola) - sin salida por consola en modo GUI
-
+            // Menú de reclutador (modo consola)
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea
 
@@ -143,15 +153,7 @@ public class TotalTalentControlador {
                     case 2:
                         gestionarContratos();
                         break;
-                    case 3:
-                        buscarCandidatos();
-                        break;
-                    case 4:
-                        generarReportes();
-                        break;
-                    case 5:
-                        verEstadisticas();
-                        break;
+                    // ... (más casos)
                     case 6:
                         logout();
                         continuar = false;
@@ -165,12 +167,11 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para mostrar menú de gerente
+    // Método para mostrar menú de gerente (consola).
     private void mostrarMenuGerente() {
         boolean continuar = true;
         while (continuar) {
-            // Menú de gerente (modo consola) - sin salida por consola en modo GUI
-
+            // Menú de gerente (modo consola)
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea
 
@@ -179,18 +180,7 @@ public class TotalTalentControlador {
                     case 1:
                         generarReportes();
                         break;
-                    case 2:
-                        gestionarContratos();
-                        break;
-                    case 3:
-                        verMetricas();
-                        break;
-                    case 4:
-                        verEstadisticas();
-                        break;
-                    case 5:
-                        gestionarEmpleados();
-                        break;
+                    // ... (más casos)
                     case 6:
                         logout();
                         continuar = false;
@@ -204,12 +194,11 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para mostrar menú de empleado
+    // Método para mostrar menú de empleado (consola).
     private void mostrarMenuEmpleado() {
         boolean continuar = true;
         while (continuar) {
-            // Menú de empleado (modo consola) - sin salida por consola en modo GUI
-
+            // Menú de empleado (modo consola)
             int opcion = scanner.nextInt();
             scanner.nextLine(); // Consumir el salto de línea
 
@@ -221,12 +210,7 @@ public class TotalTalentControlador {
                     case 2:
                         actualizarInformacionPersonal();
                         break;
-                    case 3:
-                        verMisContratos();
-                        break;
-                    case 4:
-                        verEstadisticas();
-                        break;
+                    // ... (más casos)
                     case 5:
                         logout();
                         continuar = false;
@@ -241,99 +225,103 @@ public class TotalTalentControlador {
     }
 
     // ===== MÉTODOS PARA GESTIÓN DE EMPLEADOS =====
-    // Método para obtener todos los empleados
+    // Estos métodos son la "API" que el Controlador ofrece a las Vistas (Strategies).
+    
+    // Obtener todos los empleados.
     public List<Empleado> obtenerTodosEmpleados() {
         return facade.obtenerTodosEmpleados();
     }
 
-    // Método para buscar empleado por ID
+    // Buscar un empleado por su ID.
     public Empleado buscarEmpleadoPorId(int idEmpleado) {
         return facade.buscarEmpleadoPorId(idEmpleado);
     }
 
-    // Método para buscar empleado por DNI
+    // Buscar un empleado por su DNI.
     public Empleado buscarEmpleadoPorDni(String dni) {
         return facade.buscarEmpleadoPorDni(dni);
     }
 
-    // Método para buscar empleados por nombre
+    // Buscar empleados por nombre.
     public List<Empleado> buscarEmpleadosPorNombre(String nombre) {
         return facade.buscarEmpleadosPorNombre(nombre);
     }
 
-    // Método para guardar empleado
+    // Guardar un nuevo empleado.
     public void guardarEmpleado(Empleado empleado) {
         facade.guardarEmpleado(empleado);
     }
 
-    // Método para actualizar empleado
+    // Actualizar un empleado existente.
     public void actualizarEmpleado(Empleado empleado) {
         facade.actualizarEmpleado(empleado);
     }
 
-    // Método para eliminar empleado
+    // Eliminar un empleado por su ID.
     public void eliminarEmpleado(int idEmpleado) {
         facade.eliminarEmpleado(idEmpleado);
     }
 
     // ===== MÉTODOS PARA GESTIÓN DE CONTRATOS =====
-    // Método para obtener todos los contratos
+
+    // Obtener todos los contratos.
     public List<Contrato> obtenerTodosContratos() {
         return facade.obtenerTodosContratos();
     }
 
-    // Método para buscar contrato por ID
+    // Buscar un contrato por su ID.
     public Contrato buscarContratoPorId(int idContrato) {
         return facade.buscarContratoPorId(idContrato);
     }
 
-    // Método para buscar contratos por empleado
+    // Buscar todos los contratos de un empleado específico.
     public List<Contrato> buscarContratosPorEmpleado(int idEmpleado) {
         return facade.buscarContratosPorEmpleado(idEmpleado);
     }
 
-    // Método para guardar contrato
+    // Guardar un nuevo contrato.
     public void guardarContrato(Contrato contrato) {
         facade.guardarContrato(contrato);
     }
 
-    // Método para actualizar contrato
+    // Actualizar un contrato existente.
     public void actualizarContrato(Contrato contrato) {
         facade.actualizarContrato(contrato);
     }
 
-    // Método para eliminar contrato
+    // Eliminar un contrato por su ID.
     public void eliminarContrato(int idContrato) {
         facade.eliminarContrato(idContrato);
     }
 
     // ===== MÉTODOS PARA GESTIÓN DE USUARIOS =====
-    // Método para obtener todos los usuarios
+
+    // Obtener todos los usuarios.
     public List<Usuario> obtenerTodosUsuarios() {
         return facade.obtenerTodosUsuarios();
     }
 
-    // Método para buscar usuario por ID
+    // Buscar un usuario por su ID.
     public Usuario buscarUsuarioPorId(int idUsuario) {
         return facade.buscarUsuarioPorId(idUsuario);
     }
 
-    // Método para buscar usuario por nombre
+    // Buscar un usuario por su nombre de usuario.
     public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
         return facade.buscarUsuarioPorNombre(nombreUsuario);
     }
 
-    // Método para guardar usuario
+    // Guardar un nuevo usuario.
     public void guardarUsuario(Usuario usuario) {
         facade.guardarUsuario(usuario);
     }
 
-    // Método para agregar usuario
+    // Lógica de consola para agregar un usuario.
     public void agregarUsuario(String nombreUsuario, String contrasena, String rol) {
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNombreUsuario(nombreUsuario);
         nuevoUsuario.setContrasena(contrasena);
-        // Crear empleado básico para el rol
+        // Se crea un empleado básico para asociarlo, ya que el Usuario lo requiere.
         Empleado empleado = new Empleado();
         empleado.setNombre(nombreUsuario);
         empleado.setApellidos("");
@@ -342,7 +330,7 @@ public class TotalTalentControlador {
         facade.guardarUsuario(nuevoUsuario);
     }
 
-    // Método para actualizar usuario
+    // Lógica de consola para actualizar un usuario.
     public void actualizarUsuario(int idUsuario, String nombreUsuario, String contrasena, String rol) {
         Usuario usuario = facade.buscarUsuarioPorId(idUsuario);
         if (usuario != null) {
@@ -355,46 +343,50 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para actualizar usuario
+    // Actualizar un usuario (versión usada por la GUI).
     public void actualizarUsuario(Usuario usuario) {
         facade.actualizarUsuario(usuario);
     }
 
-    // Método para eliminar usuario
+    // Eliminar un usuario por su ID.
     public void eliminarUsuario(int idUsuario) {
         facade.eliminarUsuario(idUsuario);
     }
 
     // ===== MÉTODOS PARA REPORTES =====
-    // Método para generar reporte de empleados
+
+    // Generar un reporte (texto) de empleados.
     public String generarReporteEmpleados() {
         return facade.generarReporteEmpleados();
     }
 
-    // Método para generar reporte de contratos
+    // Generar un reporte (texto) de contratos.
     public String generarReporteContratos() {
         return facade.generarReporteContratos();
     }
 
-    // ===== MÉTODOS PARA EMPLEADOS =====
-    // Método para que empleado vea sus datos
+    // ===== MÉTODOS PARA EMPLEADOS (ROL) =====
+
+    // Permite al empleado logueado ver sus propios datos.
     public Empleado empleadoVerMisDatos() {
         return facade.empleadoVerMisDatos();
     }
 
-    // Método para que empleado actualice sus datos
+    // Permite al empleado logueado actualizar sus datos personales.
     public void empleadoActualizarDatos(int idEmpleado, String nuevaDireccion, String nuevoCorreo, String nuevoNumero) {
         facade.empleadoActualizarDatos(idEmpleado, nuevaDireccion, nuevoCorreo, nuevoNumero);
     }
 
     // ===== MÉTODOS PARA LOGS =====
-    // Método para obtener logs por usuario
+
+    // Obtener los logs de auditoría para un usuario específico.
     public List<String> obtenerLogsPorUsuario(String nombreUsuario) {
         return facade.obtenerLogsPorUsuario(nombreUsuario);
     }
 
-    // ===== MÉTODOS PARA MENÚS FUNCIONALES =====
-    // Método para gestionar usuarios (solo administrador)
+    // ===== MÉTODOS PARA MENÚS FUNCIONALES (CONSOLA) =====
+    // Lógica interna de la versión de consola.
+
     private void gestionarUsuarios() {
         System.out.println("\n--- GESTIÓN DE USUARIOS ---");
         System.out.println("1. Ver todos los usuarios");
@@ -451,7 +443,7 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para gestionar empleados
+    // Lógica de consola para gestionar empleados.
     private void gestionarEmpleados() {
         System.out.println("\n--- GESTIÓN DE EMPLEADOS ---");
         System.out.println("1. Ver todos los empleados");
@@ -505,11 +497,11 @@ public class TotalTalentControlador {
                 }
                 break;
             case 5:
-                // Implementar agregar empleado
+                // La lógica GUI para esto es más compleja y está en las Strategies.
                 System.out.println("Funcionalidad de agregar empleado no implementada aún.");
                 break;
             case 6:
-                // Implementar actualizar empleado
+                // La lógica GUI para esto es más compleja.
                 System.out.println("Funcionalidad de actualizar empleado no implementada aún.");
                 break;
             case 7:
@@ -525,7 +517,7 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para gestionar contratos
+    // Lógica de consola para gestionar contratos.
     private void gestionarContratos() {
         System.out.println("\n--- GESTIÓN DE CONTRATOS ---");
         System.out.println("1. Ver todos los contratos");
@@ -568,11 +560,11 @@ public class TotalTalentControlador {
                 }
                 break;
             case 4:
-                // Implementar agregar contrato
+                // La lógica GUI está en las Strategies.
                 System.out.println("Funcionalidad de agregar contrato no implementada aún.");
                 break;
             case 5:
-                // Implementar actualizar contrato
+                // La lógica GUI está en las Strategies.
                 System.out.println("Funcionalidad de actualizar contrato no implementada aún.");
                 break;
             case 6:
@@ -588,7 +580,7 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para ver logs del sistema
+    // Lógica de consola para ver logs.
     private void verLogsSistema() {
         System.out.println("\n--- LOGS DEL SISTEMA ---");
         System.out.print("Nombre de usuario para ver logs: ");
@@ -600,7 +592,7 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para generar reportes
+    // Lógica de consola para generar reportes.
     private void generarReportes() {
         System.out.println("\n--- GENERACIÓN DE REPORTES ---");
         System.out.println("1. Reporte de empleados");
@@ -627,7 +619,7 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para ver estadísticas
+    // Lógica de consola para ver estadísticas.
     private void verEstadisticas() {
         System.out.println("\n--- ESTADÍSTICAS DEL SISTEMA ---");
         List<Empleado> empleados = obtenerTodosEmpleados();
@@ -638,7 +630,7 @@ public class TotalTalentControlador {
         System.out.println("Total de contratos: " + contratos.size());
         System.out.println("Total de usuarios: " + usuarios.size());
 
-        // Estadísticas por rol
+        // Conteo de roles usando streams.
         long administradores = usuarios.stream().filter(u -> u.getRol() == Rol.ADMINISTRADOR).count();
         long reclutadores = usuarios.stream().filter(u -> u.getRol() == Rol.RECLUTADOR).count();
         long gerentes = usuarios.stream().filter(u -> u.getRol() == Rol.GERENTE).count();
@@ -650,21 +642,19 @@ public class TotalTalentControlador {
         System.out.println("Empleados: " + empleadosRol);
     }
 
-    // Método para buscar candidatos
+    // Lógica de consola (placeholder).
     private void buscarCandidatos() {
         System.out.println("\n--- BÚSQUEDA DE CANDIDATOS ---");
         System.out.println("Funcionalidad de búsqueda de candidatos no implementada aún.");
-        // Aquí se implementaría la lógica para buscar candidatos externos
     }
 
-    // Método para ver métricas
+    // Lógica de consola (placeholder).
     private void verMetricas() {
         System.out.println("\n--- MÉTRICAS DEL SISTEMA ---");
         System.out.println("Funcionalidad de métricas no implementada aún.");
-        // Aquí se implementaría la lógica para mostrar métricas avanzadas
     }
 
-    // Método para ver mis datos (empleado)
+    // Lógica de consola para que un empleado vea sus datos.
     private void verMisDatos() {
         System.out.println("\n--- MIS DATOS ---");
         Empleado empleado = empleadoVerMisDatos();
@@ -675,7 +665,7 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para actualizar información personal
+    // Lógica de consola para que un empleado actualice sus datos.
     private void actualizarInformacionPersonal() {
         System.out.println("\n--- ACTUALIZAR INFORMACIÓN PERSONAL ---");
         System.out.print("Nueva dirección: ");
@@ -695,7 +685,7 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para ver mis contratos
+    // Lógica de consola para que un empleado vea sus contratos.
     private void verMisContratos() {
         System.out.println("\n--- MIS CONTRATOS ---");
         Usuario usuarioActual = getUsuarioActual();
@@ -710,15 +700,15 @@ public class TotalTalentControlador {
         }
     }
 
-    // Método para cerrar el controlador y liberar recursos
+    // Método para cerrar el controlador y liberar recursos.
     public void cerrar() {
         if (scanner != null) {
             scanner.close();
         }
-        facade.cerrarConexion();
+        facade.cerrarConexion(); // Importante: cierra la conexión a la BD.
     }
 
-    // Getter para el facade (para acceso directo si es necesario)
+    // Getter para el facade (usado por las Vistas).
     public Facade getFacade() {
         return facade;
     }

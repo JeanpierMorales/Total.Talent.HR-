@@ -1,315 +1,315 @@
-package Vista.Strategy;
+    package Vista.Strategy;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
+    import java.awt.BorderLayout;
+    import java.awt.Color;
+    import java.awt.Component;
+    import java.awt.Dimension;
+    import java.awt.FlowLayout;
+    import java.awt.Font;
+    import java.awt.GridLayout;
+    import java.util.Comparator;
+    import java.util.List;
+    import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
+    import javax.swing.BorderFactory;
+    import javax.swing.Box;
+    import javax.swing.BoxLayout;
+    import javax.swing.JButton;
+    import javax.swing.JCheckBox;
+    import javax.swing.JComboBox;
+    import javax.swing.JDialog;
+    import javax.swing.JFrame;
+    import javax.swing.JLabel;
+    import javax.swing.JOptionPane;
+    import javax.swing.JPanel;
+    import javax.swing.JPasswordField;
+    import javax.swing.JScrollPane;
+    import javax.swing.JSpinner;
+    import javax.swing.JTable;
+    import javax.swing.JTextArea;
+    import javax.swing.JTextField;
+    import javax.swing.ListSelectionModel;
+    import javax.swing.SpinnerDateModel;
+    import javax.swing.SwingConstants;
+    import javax.swing.SwingUtilities;
+    import javax.swing.table.DefaultTableModel;
 
-import Controlador.TotalTalentControlador;
-import Modelo.Contrato;
-import Modelo.Empleado;
-import Modelo.Rol;
-import Modelo.Usuario;
-import Utilidades.Validaciones;
-import Vista.DashboardVista;
+    import Controlador.TotalTalentControlador;
+    import Modelo.Contrato;
+    import Modelo.Empleado;
+    import Modelo.Rol;
+    import Modelo.Usuario;
+    import Utilidades.Validaciones;
+    import Vista.DashboardVista;
 
-// Estrategia específica para el rol de Administrador
-// Implementa funcionalidades completas de gestión del sistema
-public class AdminStrategy implements DashboardStrategy {
+    // Estrategia específica para el rol de Administrador
+    // Implementa funcionalidades completas de gestión del sistema
+    public class AdminStrategy implements DashboardStrategy {
 
-    // Colores específicos del administrador (azules)
-    @Override
-    public Color getColorFondo() {
-        return new Color(240, 248, 255);
-    } // Alice Blue
+        // Colores específicos del administrador (azules)
+        @Override
+        public Color getColorFondo() {
+            return new Color(240, 248, 255);
+        } // Alice Blue
 
-    @Override
-    public Color getColorBoton() {
-        return new Color(173, 216, 230);
-    } // Light Blue
+        @Override
+        public Color getColorBoton() {
+            return new Color(173, 216, 230);
+        } // Light Blue
 
-    @Override
-    public Color getColorBotonHover() {
-        return new Color(135, 206, 250);
-    } // Sky Blue
+        @Override
+        public Color getColorBotonHover() {
+            return new Color(135, 206, 250);
+        } // Sky Blue
 
-    @Override
-    public Color getColorTexto() {
-        return new Color(25, 25, 112);
-    } // Midnight Blue
+        @Override
+        public Color getColorTexto() {
+            return new Color(25, 25, 112);
+        } // Midnight Blue
 
-    @Override
-    public Color getColorNavbar() {
-        return new Color(200, 230, 255);
-    } // Light Blue for navbar
+        @Override
+        public Color getColorNavbar() {
+            return new Color(200, 230, 255);
+        } // Light Blue for navbar
 
-    @Override
-    public String getTituloVentana() {
-        return "Dashboard Administrador - Total Talent HR";
-    }
-
-    @Override
-    public String getMensajeBienvenida() {
-        return "Panel Principal - Administrador";
-    }
-
-    @Override
-    public String getMensajeInfo() {
-        return "Selecciona una opción del menú lateral para gestionar el sistema.";
-    }
-
-    @Override
-    public JPanel crearNavbar(Object dashboard) {
-        DashboardVista vista = (DashboardVista) dashboard;
-        JPanel panelIzquierdo = new JPanel();
-        panelIzquierdo.setLayout(new BoxLayout(panelIzquierdo, BoxLayout.Y_AXIS));
-        panelIzquierdo.setBackground(getColorNavbar());
-        panelIzquierdo.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
-        panelIzquierdo.setPreferredSize(new Dimension(200, vista.getHeight()));
-
-        JButton btnGestionarUsuarios = crearBotonNavbar("Gestionar Usuarios", vista);
-        JButton btnGestionarEmpleados = crearBotonNavbar("Gestionar Empleados", vista);
-        JButton btnGestionarContratos = crearBotonNavbar("Gestionar Contratos", vista);
-        JButton btnVerLogs = crearBotonNavbar("Ver Logs del Sistema", vista);
-        JButton btnGenerarReportes = crearBotonNavbar("Generar Reportes", vista);
-        JButton btnVerEstadisticas = crearBotonNavbar("Ver Estadísticas", vista);
-
-        panelIzquierdo.add(btnGestionarUsuarios);
-        panelIzquierdo.add(Box.createVerticalStrut(10));
-        panelIzquierdo.add(btnGestionarEmpleados);
-        panelIzquierdo.add(Box.createVerticalStrut(10));
-        panelIzquierdo.add(btnGestionarContratos);
-        panelIzquierdo.add(Box.createVerticalStrut(10));
-        panelIzquierdo.add(btnVerLogs);
-        panelIzquierdo.add(Box.createVerticalStrut(10));
-        panelIzquierdo.add(btnGenerarReportes);
-        panelIzquierdo.add(Box.createVerticalStrut(10));
-        panelIzquierdo.add(btnVerEstadisticas);
-
-        return panelIzquierdo;
-    }
-
-    private JButton crearBotonNavbar(String texto, DashboardVista vista) {
-        JButton boton = new JButton(texto);
-        boton.setBackground(getColorBoton());
-        boton.setForeground(getColorTexto());
-        boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createRaisedBevelBorder());
-        boton.setMaximumSize(new Dimension(180, 40));
-        boton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                boton.setBackground(getColorBotonHover());
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                boton.setBackground(getColorBoton());
-            }
-        });
-        boton.addActionListener(e -> vista.mostrarPanel(texto));
-        return boton;
-    }
-
-    @Override
-    public void mostrarPanel(String panelNombre, JPanel panelContenido, Object dashboard) {
-        DashboardVista vista = (DashboardVista) dashboard;
-        TotalTalentControlador controlador = vista.getControlador();
-
-        switch (panelNombre) {
-            case "Gestionar Usuarios":
-                mostrarPanelGestionUsuarios(panelContenido, vista, controlador);
-                break;
-            case "Gestionar Empleados":
-                mostrarPanelGestionEmpleados(panelContenido, vista, controlador);
-                break;
-            case "Gestionar Contratos":
-                mostrarPanelGestionContratos(panelContenido, vista, controlador);
-                break;
-            case "Ver Logs del Sistema":
-                mostrarPanelLogs(panelContenido, vista, controlador);
-                break;
-            case "Generar Reportes":
-                mostrarPanelReportes(panelContenido, vista, controlador);
-                break;
-            case "Ver Estadísticas":
-                mostrarPanelEstadisticas(panelContenido, vista, controlador);
-                break;
-            default:
-                vista.mostrarPanelPrincipalPublico();
-        }
-    }
-
-    private void mostrarPanelGestionUsuarios(JPanel panelContenido, DashboardVista vista, TotalTalentControlador controlador) {
-        panelContenido.removeAll();
-        panelContenido.setLayout(new BorderLayout());
-
-        JPanel panelGestion = new JPanel();
-        panelGestion.setBackground(getColorFondo());
-        panelGestion.setLayout(new BoxLayout(panelGestion, BoxLayout.Y_AXIS));
-        panelGestion.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-
-        JLabel lblTitulo = new JLabel("GESTIÓN DE USUARIOS", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
-        lblTitulo.setForeground(getColorTexto());
-        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Botones CRUD
-        JPanel panelBotones = new JPanel(new FlowLayout());
-        panelBotones.setBackground(getColorFondo());
-
-        JButton btnAgregar = new JButton("Agregar Usuario");
-        // JButton btnEditar = new JButton("Editar Usuario");
-        JButton btnEliminar = new JButton("Eliminar Usuario");
-        JButton btnRefrescar = new JButton("Refrescar");
-
-        estilizarBoton(btnAgregar);
-        // estilizarBoton(btnEditar);
-        estilizarBoton(btnEliminar);
-        estilizarBoton(btnRefrescar);
-
-        btnAgregar.addActionListener(e -> mostrarDialogoAgregarUsuario(controlador, vista));
-        // btnEditar.addActionListener(e -> mostrarDialogoEditarUsuario(controlador, vista));
-        btnEliminar.addActionListener(e -> eliminarUsuario(controlador, vista));
-        btnRefrescar.addActionListener(e -> mostrarPanelGestionUsuarios(panelContenido, vista, controlador));
-
-        panelBotones.add(btnAgregar);
-        // panelBotones.add(btnEditar);
-        panelBotones.add(btnEliminar);
-        panelBotones.add(btnRefrescar);
-
-        // Tabla de usuarios
-        DefaultTableModel modeloTabla = new DefaultTableModel(new String[]{"ID", "Nombre Usuario", "Rol", "Empleado Vinculado"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        JTable tablaUsuarios = new JTable(modeloTabla);
-        tablaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tablaUsuarios.getTableHeader().setReorderingAllowed(false);
-        vista.setTablaSeleccionada(tablaUsuarios);
-
-        // Cargar datos ordenados por ID
-        try {
-            List<Usuario> usuarios = controlador.obtenerTodosUsuarios();
-            usuarios = usuarios.stream().sorted(Comparator.comparing(Usuario::getIdUsuario)).collect(Collectors.toList());
-            for (Usuario usuario : usuarios) {
-                String empleadoInfo = usuario.getEmpleado() != null
-                        ? usuario.getEmpleado().getNombre() + " " + usuario.getEmpleado().getApellidos()
-                        : "Sin vincular";
-                modeloTabla.addRow(new Object[]{
-                    usuario.getIdUsuario(),
-                    usuario.getNombreUsuario(),
-                    usuario.getRol(),
-                    empleadoInfo
-                });
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(vista, "Error al cargar usuarios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        @Override
+        public String getTituloVentana() {
+            return "Dashboard Administrador - Total Talent HR";
         }
 
-        JScrollPane scrollPane = new JScrollPane(tablaUsuarios);
+        @Override
+        public String getMensajeBienvenida() {
+            return "Panel Principal - Administrador";
+        }
 
-        panelGestion.add(lblTitulo);
-        panelGestion.add(Box.createVerticalStrut(20));
-        panelGestion.add(panelBotones);
-        panelGestion.add(Box.createVerticalStrut(20));
-        panelGestion.add(scrollPane);
+        @Override
+        public String getMensajeInfo() {
+            return "Selecciona una opción del menú lateral para gestionar el sistema.";
+        }
 
-        panelContenido.add(panelGestion, BorderLayout.CENTER);
-        panelContenido.revalidate();
-        panelContenido.repaint();
-    }
+        @Override
+        public JPanel crearNavbar(Object dashboard) {
+            DashboardVista vista = (DashboardVista) dashboard;
+            JPanel panelIzquierdo = new JPanel();
+            panelIzquierdo.setLayout(new BoxLayout(panelIzquierdo, BoxLayout.Y_AXIS));
+            panelIzquierdo.setBackground(getColorNavbar());
+            panelIzquierdo.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+            panelIzquierdo.setPreferredSize(new Dimension(200, vista.getHeight()));
 
-    private void estilizarBoton(JButton boton) {
-        boton.setBackground(getColorBoton());
-        boton.setForeground(getColorTexto());
-        boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createRaisedBevelBorder());
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                boton.setBackground(getColorBotonHover());
-            }
+            JButton btnGestionarUsuarios = crearBotonNavbar("Gestionar Usuarios", vista);
+            JButton btnGestionarEmpleados = crearBotonNavbar("Gestionar Empleados", vista);
+            JButton btnGestionarContratos = crearBotonNavbar("Gestionar Contratos", vista);
+            JButton btnVerLogs = crearBotonNavbar("Ver Logs del Sistema", vista);
+            JButton btnGenerarReportes = crearBotonNavbar("Generar Reportes", vista);
+            JButton btnVerEstadisticas = crearBotonNavbar("Ver Estadísticas", vista);
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                boton.setBackground(getColorBoton());
-            }
-        });
-    }
+            panelIzquierdo.add(btnGestionarUsuarios);
+            panelIzquierdo.add(Box.createVerticalStrut(10));
+            panelIzquierdo.add(btnGestionarEmpleados);
+            panelIzquierdo.add(Box.createVerticalStrut(10));
+            panelIzquierdo.add(btnGestionarContratos);
+            panelIzquierdo.add(Box.createVerticalStrut(10));
+            panelIzquierdo.add(btnVerLogs);
+            panelIzquierdo.add(Box.createVerticalStrut(10));
+            panelIzquierdo.add(btnGenerarReportes);
+            panelIzquierdo.add(Box.createVerticalStrut(10));
+            panelIzquierdo.add(btnVerEstadisticas);
 
-    private void mostrarDialogoAgregarUsuario(TotalTalentControlador controlador, DashboardVista vista) {
-        JDialog dialogo = new JDialog((JFrame) SwingUtilities.getWindowAncestor(vista), "Agregar Usuario", true);
-        dialogo.setLayout(new BoxLayout(dialogo.getContentPane(), BoxLayout.Y_AXIS));
-        dialogo.setSize(450, 250);
-        dialogo.setLocationRelativeTo(vista);
+            return panelIzquierdo;
+        }
 
-        JTextField txtNombreUsuario = new JTextField(20);
-        JPasswordField txtContrasena = new JPasswordField(20);
-
-        // Seleccionar empleado que no tenga usuario asignado
-        JComboBox<String> cbEmpleados = new JComboBox<>();
-        try {
-            List<Empleado> empleados = controlador.obtenerTodosEmpleados();
-            List<Usuario> usuarios = controlador.obtenerTodosUsuarios();
-            // Filtrar empleados que no tienen usuario asignado
-            for (Empleado emp : empleados) {
-                boolean tieneUsuario = usuarios.stream().anyMatch(u -> u.getEmpleado() != null && u.getEmpleado().getIdEmpleado() == emp.getIdEmpleado());
-                if (!tieneUsuario) {
-                    cbEmpleados.addItem(emp.getIdEmpleado() + " - " + emp.getNombre() + " " + emp.getApellidos());
+        private JButton crearBotonNavbar(String texto, DashboardVista vista) {
+            JButton boton = new JButton(texto);
+            boton.setBackground(getColorBoton());
+            boton.setForeground(getColorTexto());
+            boton.setFocusPainted(false);
+            boton.setBorder(BorderFactory.createRaisedBevelBorder());
+            boton.setMaximumSize(new Dimension(180, 40));
+            boton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            boton.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    boton.setBackground(getColorBotonHover());
                 }
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(dialogo, "Error al cargar empleados: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    boton.setBackground(getColorBoton());
+                }
+            });
+            boton.addActionListener(e -> vista.mostrarPanel(texto));
+            return boton;
         }
 
-        // Crear paneles para cada fila con alineación izquierda-derecha
-        JPanel panelNombre = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelNombre.add(new JLabel("Nombre del nuevo usuario:"));
-        panelNombre.add(txtNombreUsuario);
+        @Override
+        public void mostrarPanel(String panelNombre, JPanel panelContenido, Object dashboard) {
+            DashboardVista vista = (DashboardVista) dashboard;
+            TotalTalentControlador controlador = vista.getControlador();
 
-        JPanel panelContrasena = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelContrasena.add(new JLabel("Contraseña para el Nuevo usuario:"));
-        panelContrasena.add(txtContrasena);
+            switch (panelNombre) {
+                case "Gestionar Usuarios":
+                    mostrarPanelGestionUsuarios(panelContenido, vista, controlador);
+                    break;
+                case "Gestionar Empleados":
+                    mostrarPanelGestionEmpleados(panelContenido, vista, controlador);
+                    break;
+                case "Gestionar Contratos":
+                    mostrarPanelGestionContratos(panelContenido, vista, controlador);
+                    break;
+                case "Ver Logs del Sistema":
+                    mostrarPanelLogs(panelContenido, vista, controlador);
+                    break;
+                case "Generar Reportes":
+                    mostrarPanelReportes(panelContenido, vista, controlador);
+                    break;
+                case "Ver Estadísticas":
+                    mostrarPanelEstadisticas(panelContenido, vista, controlador);
+                    break;
+                default:
+                    vista.mostrarPanelPrincipalPublico();
+            }
+        }
 
-        JPanel panelEmpleado = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelEmpleado.add(new JLabel("Empleado para el Nuevo usuario:"));
-        panelEmpleado.add(cbEmpleados);
+        private void mostrarPanelGestionUsuarios(JPanel panelContenido, DashboardVista vista, TotalTalentControlador controlador) {
+            panelContenido.removeAll();
+            panelContenido.setLayout(new BorderLayout());
 
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton btnGuardar = new JButton("Guardar");
-        JButton btnCancelar = new JButton("Cancelar");
-        panelBotones.add(btnGuardar);
-        panelBotones.add(btnCancelar);
+            JPanel panelGestion = new JPanel();
+            panelGestion.setBackground(getColorFondo());
+            panelGestion.setLayout(new BoxLayout(panelGestion, BoxLayout.Y_AXIS));
+            panelGestion.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+            JLabel lblTitulo = new JLabel("GESTIÓN DE USUARIOS", SwingConstants.CENTER);
+            lblTitulo.setFont(new Font("Arial", Font.BOLD, 20));
+            lblTitulo.setForeground(getColorTexto());
+            lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            // Botones CRUD
+            JPanel panelBotones = new JPanel(new FlowLayout());
+            panelBotones.setBackground(getColorFondo());
+
+            JButton btnAgregar = new JButton("Agregar Usuario");
+            // JButton btnEditar = new JButton("Editar Usuario");
+            JButton btnEliminar = new JButton("Eliminar Usuario");
+            JButton btnRefrescar = new JButton("Refrescar");
+
+            estilizarBoton(btnAgregar);
+            // estilizarBoton(btnEditar);
+            estilizarBoton(btnEliminar);
+            estilizarBoton(btnRefrescar);
+
+            btnAgregar.addActionListener(e -> mostrarDialogoAgregarUsuario(controlador, vista));
+            // btnEditar.addActionListener(e -> mostrarDialogoEditarUsuario(controlador, vista));
+            btnEliminar.addActionListener(e -> eliminarUsuario(controlador, vista));
+            btnRefrescar.addActionListener(e -> mostrarPanelGestionUsuarios(panelContenido, vista, controlador));
+
+            panelBotones.add(btnAgregar);
+            // panelBotones.add(btnEditar);
+            panelBotones.add(btnEliminar);
+            panelBotones.add(btnRefrescar);
+
+            // Tabla de usuarios
+            DefaultTableModel modeloTabla = new DefaultTableModel(new String[]{"ID", "Nombre Usuario", "Rol", "Empleado Vinculado"}, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            JTable tablaUsuarios = new JTable(modeloTabla);
+            tablaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            tablaUsuarios.getTableHeader().setReorderingAllowed(false);
+            vista.setTablaSeleccionada(tablaUsuarios);
+
+            // Cargar datos ordenados por ID
+            try {
+                List<Usuario> usuarios = controlador.obtenerTodosUsuarios();
+                usuarios = usuarios.stream().sorted(Comparator.comparing(Usuario::getIdUsuario)).collect(Collectors.toList());
+                for (Usuario usuario : usuarios) {
+                    String empleadoInfo = usuario.getEmpleado() != null
+                            ? usuario.getEmpleado().getNombre() + " " + usuario.getEmpleado().getApellidos()
+                            : "Sin vincular";
+                    modeloTabla.addRow(new Object[]{
+                        usuario.getIdUsuario(),
+                        usuario.getNombreUsuario(),
+                        usuario.getRol(),
+                        empleadoInfo
+                    });
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(vista, "Error al cargar usuarios: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            JScrollPane scrollPane = new JScrollPane(tablaUsuarios);
+
+            panelGestion.add(lblTitulo);
+            panelGestion.add(Box.createVerticalStrut(20));
+            panelGestion.add(panelBotones);
+            panelGestion.add(Box.createVerticalStrut(20));
+            panelGestion.add(scrollPane);
+
+            panelContenido.add(panelGestion, BorderLayout.CENTER);
+            panelContenido.revalidate();
+            panelContenido.repaint();
+        }
+
+        private void estilizarBoton(JButton boton) {
+            boton.setBackground(getColorBoton());
+            boton.setForeground(getColorTexto());
+            boton.setFocusPainted(false);
+            boton.setBorder(BorderFactory.createRaisedBevelBorder());
+            boton.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    boton.setBackground(getColorBotonHover());
+                }
+
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    boton.setBackground(getColorBoton());
+                }
+            });
+        }
+
+        private void mostrarDialogoAgregarUsuario(TotalTalentControlador controlador, DashboardVista vista) {
+            JDialog dialogo = new JDialog((JFrame) SwingUtilities.getWindowAncestor(vista), "Agregar Usuario", true);
+            dialogo.setLayout(new BoxLayout(dialogo.getContentPane(), BoxLayout.Y_AXIS));
+            dialogo.setSize(450, 250);
+            dialogo.setLocationRelativeTo(vista);
+
+            JTextField txtNombreUsuario = new JTextField(20);
+            JPasswordField txtContrasena = new JPasswordField(20);
+
+            // Seleccionar empleado que no tenga usuario asignado
+            JComboBox<String> cbEmpleados = new JComboBox<>();
+            try {
+                List<Empleado> empleados = controlador.obtenerTodosEmpleados();
+                List<Usuario> usuarios = controlador.obtenerTodosUsuarios();
+                // Filtrar empleados que no tienen usuario asignado
+                for (Empleado emp : empleados) {
+                    boolean tieneUsuario = usuarios.stream().anyMatch(u -> u.getEmpleado() != null && u.getEmpleado().getIdEmpleado() == emp.getIdEmpleado());
+                    if (!tieneUsuario) {
+                        cbEmpleados.addItem(emp.getIdEmpleado() + " - " + emp.getNombre() + " " + emp.getApellidos());
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(dialogo, "Error al cargar empleados: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Crear paneles para cada fila con alineación izquierda-derecha
+            JPanel panelNombre = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            panelNombre.add(new JLabel("Nombre del nuevo usuario:"));
+            panelNombre.add(txtNombreUsuario);
+
+            JPanel panelContrasena = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            panelContrasena.add(new JLabel("Contraseña para el Nuevo usuario:"));
+            panelContrasena.add(txtContrasena);
+
+            JPanel panelEmpleado = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            panelEmpleado.add(new JLabel("Empleado para el Nuevo usuario:"));
+            panelEmpleado.add(cbEmpleados);
+
+            JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            JButton btnGuardar = new JButton("Guardar");
+            JButton btnCancelar = new JButton("Cancelar");
+            panelBotones.add(btnGuardar);
+            panelBotones.add(btnCancelar);
 
         btnGuardar.addActionListener(e -> {
             String nombreUsuario = txtNombreUsuario.getText().trim();
@@ -1196,9 +1196,9 @@ public class AdminStrategy implements DashboardStrategy {
                 contrato.setEmpleado(controlador.buscarEmpleadoPorId(idEmpleado));
 
                 // Campos comunes
-                contrato.setSalarioBase(Double.parseDouble(txtSalarioBase.getText().trim()));
-                contrato.setBonificacion(Double.parseDouble(txtBonificacion.getText().trim()));
-                contrato.setDescuentoAFP(Double.parseDouble(txtDescuentoAFP.getText().trim()));
+                contrato.setSalarioBase(Float.parseFloat(txtSalarioBase.getText().trim()));
+                contrato.setBonificacion(Float.parseFloat(txtBonificacion.getText().trim()));
+                contrato.setDescuentoAFP(Float.parseFloat(txtDescuentoAFP.getText().trim()));
                 contrato.setFechaInicio((java.util.Date) spFechaInicio.getValue());
                 if (!chkFechaFinIndefinida.isSelected()) {
                     contrato.setFechaFin((java.util.Date) spFechaFin.getValue());
@@ -1209,14 +1209,14 @@ public class AdminStrategy implements DashboardStrategy {
                 if ("Parcial".equals(tipo)) {
                     Modelo.Factory.ContratoParcial cp = (Modelo.Factory.ContratoParcial) contrato;
                     cp.setHorasTrabajadas(Integer.parseInt(txtHorasTrabajadas.getText().trim()));
-                    cp.setPagoPorHora(Double.parseDouble(txtPagoPorHora.getText().trim()));
+                    cp.setPagoPorHora(Float.parseFloat(txtPagoPorHora.getText().trim()));
                 } else if ("Planilla".equals(tipo)) {
                     Modelo.Factory.ContratoPlanilla cp = (Modelo.Factory.ContratoPlanilla) contrato;
-                    cp.setHorasExtras(Double.parseDouble(txtHorasExtras.getText().trim()));
+                    cp.setHorasExtras(Float.parseFloat(txtHorasExtras.getText().trim()));
                 } else if ("Locación".equals(tipo)) {
                     Modelo.Factory.ContratoLocacion cl = (Modelo.Factory.ContratoLocacion) contrato;
                     cl.setNumeroProyectos(Integer.parseInt(txtNumeroProyectos.getText().trim()));
-                    cl.setMontoPorProyecto(Double.parseDouble(txtMontoPorProyecto.getText().trim()));
+                    cl.setMontoPorProyecto(Float.parseFloat(txtMontoPorProyecto.getText().trim()));
                 }
 
                 controlador.guardarContrato(contrato);
@@ -1382,9 +1382,9 @@ public class AdminStrategy implements DashboardStrategy {
                 }
 
                 // Actualizar contrato existente
-                contratoExistente.setSalarioBase(Double.parseDouble(txtSalarioBase.getText().trim()));
-                contratoExistente.setBonificacion(Double.parseDouble(txtBonificacion.getText().trim()));
-                contratoExistente.setDescuentoAFP(Double.parseDouble(txtDescuentoAFP.getText().trim()));
+                contratoExistente.setSalarioBase(Float.parseFloat(txtSalarioBase.getText().trim()));
+                contratoExistente.setBonificacion(Float.parseFloat(txtBonificacion.getText().trim()));
+                contratoExistente.setDescuentoAFP(Float.parseFloat(txtDescuentoAFP.getText().trim()));
                 contratoExistente.setFechaInicio((java.util.Date) spFechaInicio.getValue());
                 if (!chkFechaFinIndefinida.isSelected()) {
                     contratoExistente.setFechaFin((java.util.Date) spFechaFin.getValue());
@@ -1400,14 +1400,14 @@ public class AdminStrategy implements DashboardStrategy {
                 if ("Parcial".equals(tipo)) {
                     Modelo.Factory.ContratoParcial cp = (Modelo.Factory.ContratoParcial) contratoExistente;
                     cp.setHorasTrabajadas(Integer.parseInt(txtHorasTrabajadas.getText().trim()));
-                    cp.setPagoPorHora(Double.parseDouble(txtPagoPorHora.getText().trim()));
+                    cp.setPagoPorHora(Float.parseFloat(txtPagoPorHora.getText().trim()));
                 } else if ("Planilla".equals(tipo)) {
                     Modelo.Factory.ContratoPlanilla cp = (Modelo.Factory.ContratoPlanilla) contratoExistente;
-                    cp.setHorasExtras(Double.parseDouble(txtHorasExtras.getText().trim()));
+                    cp.setHorasExtras(Float.parseFloat(txtHorasExtras.getText().trim()));
                 } else if ("Locación".equals(tipo)) {
                     Modelo.Factory.ContratoLocacion cl = (Modelo.Factory.ContratoLocacion) contratoExistente;
                     cl.setNumeroProyectos(Integer.parseInt(txtNumeroProyectos.getText().trim()));
-                    cl.setMontoPorProyecto(Double.parseDouble(txtMontoPorProyecto.getText().trim()));
+                    cl.setMontoPorProyecto(Float.parseFloat(txtMontoPorProyecto.getText().trim()));
                 }
 
                 controlador.actualizarContrato(contratoExistente);

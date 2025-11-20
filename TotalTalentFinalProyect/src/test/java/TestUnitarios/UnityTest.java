@@ -24,6 +24,15 @@ public class UnityTest {
 
         // Caso inválido: menos de 8 dígitos
         assertFalse(Validaciones.validarDNI("1234567"), "DNI con menos de 8 dígitos debería ser rechazado");
+
+        // Caso inválido: más de 8 dígitos
+        assertFalse(Validaciones.validarDNI("123456789"), "DNI con más de 8 dígitos debería ser rechazado");
+
+        // Caso inválido: contiene letras
+        assertFalse(Validaciones.validarDNI("1234567a"), "DNI con letras debería ser rechazado");
+
+        // Caso inválido: nulo
+        assertFalse(Validaciones.validarDNI(null), "DNI nulo debería ser rechazado");
     }
 
     /**
@@ -33,6 +42,9 @@ public class UnityTest {
     public void testValidarEmail() {
         // Caso válido
         assertTrue(Validaciones.validarEmail("omar@gmail.com"), "Email válido debería ser aceptado");
+
+        // Caso inválido: sin @
+        assertFalse(Validaciones.validarEmail("fabzemail.com"), "Email sin @ debería ser rechazado");
 
         // Caso inválido: sin dominio
         assertFalse(Validaciones.validarEmail("rosa@"), "Email sin dominio debería ser rechazado");
@@ -79,6 +91,7 @@ public class UnityTest {
 
         // Caso inválido: cadena vacía
         assertFalse(Validaciones.validarNoVacio(""), "Cadena vacía debería ser rechazada");
+
         // Caso inválido: cadena con solo espacios
         assertFalse(Validaciones.validarNoVacio("   "), "Cadena con solo espacios debería ser rechazada");
 

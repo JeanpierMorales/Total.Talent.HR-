@@ -4,34 +4,35 @@ import Modelo.Contrato;
 import java.util.Date;
 import java.util.List;
 
-// Interfaz para el repositorio de contratos que define las operaciones CRUD para la entidad Contrato
-
+// --- Interfaz ContratoRepository ---
+// Esta interfaz define el contrato (las operaciones CRUD) para la entidad Contrato.
+// El Facade depende de esta interfaz para gestionar contratos.
 public interface ContratoRepository {
 
-    // Método para guardar un nuevo contrato en la base de datos
+    // Define un método para guardar un nuevo contrato.
     void guardar(Contrato contrato);
 
-    // Método para actualizar un contrato existente
+    // Define un método para actualizar un contrato existente.
     void actualizar(Contrato contrato);
 
-    // Método para eliminar un contrato por su ID
+    // Define un método para eliminar un contrato por su ID.
     void eliminar(int idContrato);
 
-    // Método para buscar un contrato por su ID
+    // Define un método para buscar un contrato por su ID.
     Contrato buscarPorId(int idContrato);
 
-    // Método para buscar contratos por ID de empleado
+    // Define un método para buscar todos los contratos de un empleado.
     List<Contrato> buscarPorEmpleado(int idEmpleado);
 
-    // Método para buscar contratos por tipo
+    // Define un método para buscar contratos por tipo (Planilla, Parcial, etc.).
     List<Contrato> buscarPorTipo(String tipoContrato);
 
-    // Método para obtener todos los contratos
+    // Define un método para obtener todos los contratos.
     List<Contrato> obtenerTodos();
 
-    // Método para buscar contratos activos sin fecha de final
+    // Define un método para buscar solo los contratos activos.
     List<Contrato> buscarContratosActivos();
 
-    // Método para buscar contratos por rango de fechas
+    // Define un método para buscar contratos por un rango de fechas.
     List<Contrato> buscarPorRangoFechas(Date fechaInicio, Date fechaFin);
 }
