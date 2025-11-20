@@ -6,18 +6,25 @@ package Modelo;
  * toque. Todos los empleados tienen un usuario para acceder al sistema, pero
  * con permisos limitados según el rol que le dimos.
  */
+// --- Entidad Usuario ---
+// Esta clase (POJO) maneja la autenticación y el acceso al sistema.
+// Es la entidad que "inicia sesión". Está directamente vinculada a un Empleado.
 public class Usuario {
 
     // Atributos de la clase Usuario
     private int idUsuario; // Identificador único del usuario
-    private String nombreUsuario; // Nombre de usuario para login que va a ser único
-    private String contrasena; // Contraseña encriptada para el login
-    private Empleado empleado; // Referencia al empleado correspondiente
-    private boolean activo; // Estado del usuario ya sea activo o inactivo
+    private String nombreUsuario; // Nombre de usuario para login (debe ser único)
+    private String contrasena; // Contraseña (idealmente debería guardarse encriptada)
+    
+    // Relación clave: Un Usuario "es" un Empleado.
+    // El Empleado asociado contiene el Rol y los datos personales.
+    private Empleado empleado; 
+    
+    private boolean activo; // Estado del usuario (para habilitar o deshabilitar cuentas)
 
     // Constructor por defecto
     public Usuario() {
-        this.activo = true; // Por defecto, usuarios nuevos están activos
+        this.activo = true; // Por defecto, los usuarios nuevos están activos.
     }
 
     // Constructor con parámetros principales
@@ -28,7 +35,8 @@ public class Usuario {
         this.activo = true;
     }
 
-    // Métodos de acceos Getters y Setters
+    // --- Métodos de acceso Getters y Setters ---
+    
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -69,24 +77,32 @@ public class Usuario {
         this.activo = activo;
     }
 
-    // Obtiene el rol del empleado asociado a este usuario
+    // --- Lógica de Negocio ---
+
+    // Obtiene el rol del empleado asociado a este usuario.
+    // Esto es un ejemplo de "delegación": el Usuario no tiene rol,
+    // le pregunta a su Empleado cuál es su rol.
+    // Usado por el Facade (tienePermiso) y las Vistas (Strategies) para
+    // determinar qué puede hacer el usuario.
     public Rol getRol() {
         return empleado != null ? empleado.getRol() : null;
     }
 
-    //  VErifica que las credenciales del usuario sean correctas
+    // Verifica que las credenciales del usuario sean correctas.
+    // Compara la contraseña ingresada con la almacenada.
+    // Es llamado por el UsuarioMysqlRepository y el Facade (login).
     public boolean verificarCredenciales(String contrasenaIngresada) {
         return this.activo && this.contrasena != null
                 && this.contrasena.equals(contrasenaIngresada);
     }
 
-    // Muestra la información del usuario por consola para probar la clase 
+    // Muestra la información del usuario por consola (para pruebas y logs).
     @Override
     public String toString() {
         return "Usuario{"
                 + "idUsuario=" + idUsuario
                 + ", nombreUsuario='" + nombreUsuario + '\''
-                + ", rol=" + getRol()
+                + ", rol=" + getRol() // Llama al método getRol()
                 + ", activo=" + activo
                 + '}';
     }

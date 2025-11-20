@@ -8,12 +8,34 @@ import Modelo.Usuario;
 import Modelo.Factory.ContratoFactory;
 import Utilidades.Validaciones;
 import Vista.DashboardVista;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 // Estrategia específica para el rol de Reclutador
 // Implementa funcionalidades de gestión de empleados y contratos
@@ -212,7 +234,7 @@ public class ReclutadorStrategy implements DashboardStrategy {
         lblTitulo.setForeground(getColorTexto());
         lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Filtro por tipo de contrato
+        // Filtro por cada tipo de contrato
         JPanel panelFiltro = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelFiltro.setBackground(getColorFondo());
         panelFiltro.add(new JLabel("Filtrar por tipo:"));
@@ -456,7 +478,7 @@ public class ReclutadorStrategy implements DashboardStrategy {
             }
         });
     }
-
+// Contiene toda la lógica para agregar un nuevo empleado a la base de datos
     private void mostrarDialogoAgregarEmpleado(TotalTalentControlador controlador, DashboardVista vista) {
         JDialog dialogo = new JDialog((JFrame) SwingUtilities.getWindowAncestor(vista), "Agregar Empleado", true);
         dialogo.setLayout(new GridLayout(12, 2, 10, 10));
@@ -474,7 +496,7 @@ public class ReclutadorStrategy implements DashboardStrategy {
         JTextField txtCarrera = new JTextField();
         JTextArea txtComentarios = new JTextArea(3, 20);
         JComboBox<String> cbRol = new JComboBox<>(new String[]{"EMPLEADO"}); // Solo puede crear empleados
-
+//Campos obligatorios (*)y opcionales  para la creación de un empleado
         dialogo.add(new JLabel("Nombre:*"));
         dialogo.add(txtNombre);
         dialogo.add(new JLabel("Apellidos:*"));
@@ -542,7 +564,7 @@ public class ReclutadorStrategy implements DashboardStrategy {
 
         dialogo.setVisible(true);
     }
-
+//Lógica para editar un empleado 
     private void mostrarDialogoEditarEmpleado(TotalTalentControlador controlador, DashboardVista vista) {
         JTable tabla = vista.getTablaSeleccionada();
         if (tabla == null || tabla.getSelectedRow() == -1) {
@@ -575,7 +597,7 @@ public class ReclutadorStrategy implements DashboardStrategy {
             JTextField txtGradoInstruccion = new JTextField(empleado.getGradoInstruccion());
             JTextField txtCarrera = new JTextField(empleado.getCarrera());
             JTextArea txtComentarios = new JTextArea(empleado.getComentarios(), 3, 20);
-
+//Campos que puedes editar
             dialogo.add(new JLabel("Nombre:*"));
             dialogo.add(txtNombre);
             dialogo.add(new JLabel("Apellidos:*"));
@@ -798,7 +820,7 @@ public class ReclutadorStrategy implements DashboardStrategy {
                 Contrato contrato = ContratoFactory.crearContrato(tipoSeleccionado.toLowerCase());
                 contrato.setTipoContrato(tipoSeleccionado);
                 contrato.setEmpleado(controlador.buscarEmpleadoPorId(idEmpleado));
-                contrato.setSalarioBase(Double.parseDouble(txtSalarioBase.getText().trim()));
+                contrato.setSalarioBase(Float.parseFloat(txtSalarioBase.getText().trim()));
 
                 // Parsear fechas
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -808,10 +830,10 @@ public class ReclutadorStrategy implements DashboardStrategy {
                 }
 
                 if (!txtBonificacion.getText().trim().isEmpty()) {
-                    contrato.setBonificacion(Double.parseDouble(txtBonificacion.getText().trim()));
+                    contrato.setBonificacion(Float.parseFloat(txtBonificacion.getText().trim()));
                 }
                 if (!txtDescuentoAFP.getText().trim().isEmpty()) {
-                    contrato.setDescuentoAFP(Double.parseDouble(txtDescuentoAFP.getText().trim()));
+                    contrato.setDescuentoAFP(Float.parseFloat(txtDescuentoAFP.getText().trim()));
                 }
 
                 controlador.guardarContrato(contrato);
@@ -915,7 +937,7 @@ public class ReclutadorStrategy implements DashboardStrategy {
 
                     contrato.setTipoContrato(tipoSeleccionado);
                     contrato.setEmpleado(controlador.buscarEmpleadoPorId(idEmpleado));
-                    contrato.setSalarioBase(Double.parseDouble(txtSalarioBase.getText().trim()));
+                    contrato.setSalarioBase(Float.parseFloat(txtSalarioBase.getText().trim()));
 
                     // Parsear fechas
                     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -927,14 +949,14 @@ public class ReclutadorStrategy implements DashboardStrategy {
                     }
 
                     if (!txtBonificacion.getText().trim().isEmpty()) {
-                        contrato.setBonificacion(Double.parseDouble(txtBonificacion.getText().trim()));
+                        contrato.setBonificacion(Float.parseFloat(txtBonificacion.getText().trim()));
                     } else {
-                        contrato.setBonificacion(0.0);
+                        contrato.setBonificacion((float) 0.0);
                     }
                     if (!txtDescuentoAFP.getText().trim().isEmpty()) {
-                        contrato.setDescuentoAFP(Double.parseDouble(txtDescuentoAFP.getText().trim()));
+                        contrato.setDescuentoAFP(Float.parseFloat(txtDescuentoAFP.getText().trim()));
                     } else {
-                        contrato.setDescuentoAFP(0.0);
+                        contrato.setDescuentoAFP((float) 0.0);
                     }
 
                     controlador.actualizarContrato(contrato);

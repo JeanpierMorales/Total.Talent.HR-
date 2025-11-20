@@ -1,5 +1,10 @@
 package Modelo;
 
+// --- Entidad Empleado ---
+// Esta clase (POJO o Bean) representa la entidad "Empleado".
+// Contiene toda la información personal y laboral de una persona en la empresa.
+// Es una clase fundamental, ya que es la base sobre la que operan
+// los Contratos y los Usuarios.
 public class Empleado {
 
     // Atributos de la clase Empleado 
@@ -14,12 +19,17 @@ public class Empleado {
     private String gradoInstruccion;
     private String carrera;
     private String comentarios;
-    // Rol del empleado dentro del sistema
+    
+    // Atributo que almacena el rol del empleado, usando la enumeración Rol.
     private Rol rol;
-    // Atributo para el contrato del empleado
+    
+    // Atributo para el contrato actual o más relevante del empleado.
+    // Esta es una relación de agregación: un Empleado "tiene un" Contrato.
     private Contrato contrato;
 
-    // Getters y Setters
+    // --- Getters y Setters ---
+    // Métodos de acceso para todos los atributos.
+    
     public int getIdEmpleado() {
         return idEmpleado;
     }
@@ -108,7 +118,7 @@ public class Empleado {
         this.comentarios = comentarios;
     }
 
-    // Métodos de acceso para el rol 
+    // Métodos de acceso para el rol.
     public Rol getRol() {
         return rol;
     }
@@ -117,14 +127,16 @@ public class Empleado {
         this.rol = rol;
     }
 
-    // Métodos para que el empleado actualice información personal con direccion, correo o numero
+    // Método específico para que el empleado actualice su información personal.
+    // Es llamado por el Facade (empleadoActualizarDatos) cuando un Empleado
+    // edita sus propios datos desde la EmpleadoStrategy.
     public void actualizarDireccion(String nuevaDireccion, String nuevoCorreo, String nuevoNumero) {
         this.direccion = nuevaDireccion;
         this.correo = nuevoCorreo;
         this.numero = nuevoNumero;
     }
 
-    // Método para obtener los datos del empleado 
+    // Método para obtener un resumen de los datos del empleado (usado en reportes o consola).
     public String obtenerDatosEmpleado() {
         return "ID: " + this.idEmpleado + "\n"
                 + "Nombre: " + this.nombre + "\n"
@@ -141,10 +153,10 @@ public class Empleado {
     }
 
     public void validarDatos() {
-        // Lógica de validación del empleado
+        // Lógica de validación (actualmente manejada en el Facade y Validaciones).
     }
 
-    // Getter y Setter para el contrato
+    // Getter y Setter para la relación con Contrato.
     public Contrato getContrato() {
         return contrato;
     }
